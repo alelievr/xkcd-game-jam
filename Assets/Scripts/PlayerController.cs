@@ -26,11 +26,20 @@ public class PlayerController : MonoBehaviour
 	public float			balloonMaxHeight = 10;
 	public float			balloonStep = 2;
 	public GameObject		balloonSprite;
+	public GameObject		feather;
+	public float			featherPower = 5;
+	public bool				haveFeather = false;
+
+	[Space, Header("Kite control settings")]
+	public GameObject		kite;
+
+	float					balloonUpVelocity = 50f;
+
+	bool					catapultThrowed = false;
+	Vector2					catapultDirection = Vector2.right;
 
 	Rigidbody2D				rbody;
 	public bool				dead { get; private set; }
-
-	float					balloonUpVelocity = 50f;
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
 	Dictionary< PlayerControl, Action >	fixedControlActions = new Dictionary< PlayerControl, Action >();
@@ -91,27 +100,42 @@ public class PlayerController : MonoBehaviour
 		rbody.velocity = new Vector2(Mathf.Clamp(rbody.velocity.x, -maxXVelocity, maxXVelocity), rbody.velocity.y);
 	}
 
+	float verticalKeyDown { get { if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D)) return 1; if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A)) return -1; return 0; } }
+	float horizontalKeyDown { get { if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) return 1; if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) return -1; return 0; } }
+
 	void UpdateFlappy()
 	{
-		if (Input.GetKeyDown(KeyCode.Space))
+		float v = verticalKeyDown;
+		if (v != 0)
 		{
-			rbody.velocity = new Vector2(rbody.velocity.x, 0);
-			rbody.AddForce(Vector2.up * flappyUpForce, ForceMode2D.Impulse);
+			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
+			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
+			rbody.AddForce(transform.up * flappyUpForce, ForceMode2D.Impulse);
+			rbody.AddTorque(v * 4, ForceMode2D.Impulse);
 		}
 	}
 
 	void UpdateBalloon()
 	{
 		balloonSprite.SetActive(true);
-		if (Input.GetKeyDown(KeyCode.UpArrow))
-			balloonUpVelocity += balloonStep;
-		if (Input.GetKeyDown(KeyCode.DownArrow))
-			balloonUpVelocity -= balloonStep;
+		float v = horizontalKeyDown;
+		if (v != 0)
+			balloonUpVelocity += balloonStep * v;
+		if (haveFeather)
+		{
+			v = verticalKeyDown;
+			if (v != 0)
+				rbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
+		}
 	}
 
 	void UpdateCatapult()
 	{
-
+		if (Input.GetKeyDown(KeyCode.Return))
+		{
+			catapultThrowed = true;
+			rbody.AddForce(catapultDirection, ForceMode2D.Impulse);
+		}
 	}
 
 	void UpdateTortoise()
@@ -121,7 +145,13 @@ public class PlayerController : MonoBehaviour
 
 	void UpdateKite()
 	{
-
+		Vector2 startDirection = Vector3.zero - transform.position;
+		float v = verticalKeyDown;
+		rbody.gravityScale = 0;
+		
+		if (v != 0)
+		{
+		}
 	}
 
 	void FixedUpdateBalloon()
