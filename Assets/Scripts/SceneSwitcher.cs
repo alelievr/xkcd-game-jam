@@ -4,6 +4,16 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+public enum Scene
+{
+	TitleScreen,
+	History,
+	Exploration,
+	Credits,
+	Craft,
+	Travel,
+}
+
 public class SceneSwitcher : MonoBehaviour {
 
 	public float			fadeTime = 1f;
@@ -64,8 +74,10 @@ public class SceneSwitcher : MonoBehaviour {
 		{
 			alpha = 1 - ((Time.time - startTime) / fadeTime);
 			alpha = fadeCurve.Evaluate(alpha);
-			fadeAudioSource.volume = 1 - alpha;
-			panel.color = new Color(0, 0, 0, alpha);
+			if (fadeAudioSource != null)
+				fadeAudioSource.volume = 1 - alpha;
+			if (panel != null)
+				panel.color = new Color(0, 0, 0, alpha);
 			yield return null;
 		} while (alpha > 0f);
 	}
@@ -79,8 +91,10 @@ public class SceneSwitcher : MonoBehaviour {
 		{
 			alpha = ((Time.time - startTime) / fadeTime);
 			alpha = fadeCurve.Evaluate(alpha);
-			fadeAudioSource.volume = 1 - alpha;
-			panel.color = new Color(0, 0, 0, alpha);
+			if (fadeAudioSource != null)
+				fadeAudioSource.volume = 1 - alpha;
+			if (panel != null)
+				panel.color = new Color(0, 0, 0, alpha);
 			yield return null;
 		} while (alpha < 1f);
 	}
@@ -88,8 +102,8 @@ public class SceneSwitcher : MonoBehaviour {
 	IEnumerator FadeScene(string sceneName)
 	{
 		Image panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
-
 		yield return FadeIn(panel);
+		
 		SceneManager.LoadScene(sceneName);
 
 		panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
