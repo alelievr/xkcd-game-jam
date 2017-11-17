@@ -86,7 +86,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 59.98
   m_GravityScale: 5
   m_Material: {fileID: 6200000, guid: d2406d4eefc344c3d97cdf9b864a99e8, type: 2}
   m_Interpolate: 0
@@ -119,16 +119,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90e4f1870e414fb49563e18b21b4ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  control: 0
+  control: 4
   defaultWindForce: 2
-  maxXVelocity: 10
+  maxXVelocity: 8
   flappyUpForce: 15
   balloonMaxHeight: 10
   balloonStep: 2
   balloonSprite: {fileID: 1984113073145216}
   feather: {fileID: 0}
-  featherPower: 10
-  haveFeather: 0
+  featherPower: 5
+  haveFeather: 1
   kite: {fileID: 0}
 --- !u!212 &212035490596486602
 SpriteRenderer:
