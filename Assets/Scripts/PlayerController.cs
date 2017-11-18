@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
 	public GameObject		feather;
 	public float			featherPower = 5;
 	public bool				haveFeather = false;
+	public float			maxBalloonVelocity = 60;
+	public float			minBalloonVelocity = 40;
 
 	[Space, Header("Kite control settings")]
 	public GameObject		kite;
@@ -142,7 +144,15 @@ public class PlayerController : MonoBehaviour
 	{
 		float v = verticalKeyDown;
 		if (v != 0)
+		{
+			if (v > 0 && balloonUpVelocity > maxBalloonVelocity)
+				return ;
+			if (v < 0 && balloonUpVelocity < minBalloonVelocity)
+				return ;
 			balloonUpVelocity += balloonStep * v;
+			float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 10;
+			balloon.transform.localScale = Vector3.one * s;
+		}
 		if (haveFeather)
 		{
 			v = horizontalKeyDown;

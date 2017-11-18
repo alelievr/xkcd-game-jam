@@ -143,7 +143,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1984113073145216}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.14, y: 3.05, z: 0}
+  m_LocalPosition: {x: -0.12, y: 3.86, z: 0}
   m_LocalScale: {x: 0.6972361, y: 0.6972361, z: 0.6972361}
   m_Children: []
   m_Father: {fileID: 4610503619170766}
@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c90e4f1870e414fb49563e18b21b4ad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  control: 2
+  control: 1
   defaultWindForce: 2
   maxXVelocity: 8
   flappyUpForce: 15
@@ -295,6 +295,8 @@ MonoBehaviour:
   feather: {fileID: 0}
   featherPower: 5
   haveFeather: 1
+  maxBalloonVelocity: 60
+  minBalloonVelocity: 40
   kite: {fileID: 1415299275414406}
   kiteAnchor: {fileID: 4867431273278886}
   kiteWirlRange: 4
