@@ -7,6 +7,7 @@ TagManager:
   - Ground
   - Obstacle
   - Water
+  - Pickable
   layers:
   - Default
   - TransparentFX
@@ -16,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - ThroughPlatform
   - 
   - 
   - 
@@ -41,6 +42,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 3467947955
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

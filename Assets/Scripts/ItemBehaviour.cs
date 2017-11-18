@@ -27,6 +27,7 @@ public class ItemBehaviour : MonoBehaviour
 		if (playerNear && Input.GetKeyDown(KeyCode.Space))
 		{
 			item.sprite = GetComponent< SpriteRenderer >().sprite;
+			GameObject.FindObjectOfType< ReserachController >().ShowPickedObjectPopup(item);
 			PlayerStorage.instance.AddItem(item);
 			Destroy(gameObject);
 		}

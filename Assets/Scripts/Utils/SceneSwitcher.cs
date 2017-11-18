@@ -65,6 +65,36 @@ public class SceneSwitcher : MonoBehaviour {
 		StartCoroutine(FadeScene(creditsSceneame));
 	}
 
+	public void ShowScene(string sceneName)
+	{
+		StartCoroutine(FadeScene(sceneName));
+	}
+
+	public void ShowScene(Scene scene)
+	{
+		switch (scene)
+		{
+			case Scene.Craft:
+				SceneSwitcher.instance.ShowCraft();
+				break ;
+			case Scene.Credits:
+				SceneSwitcher.instance.ShowCredits();
+				break ;
+			case Scene.Exploration:
+				SceneSwitcher.instance.ShowExploration();
+				break ;
+			case Scene.History:
+				SceneSwitcher.instance.ShowHistory();
+				break ;
+			case Scene.TitleScreen:
+				SceneSwitcher.instance.ShowTitleScreen();
+				break ;
+			case Scene.Travel:
+				SceneSwitcher.instance.ShowTravel();
+				break ;
+		}
+	}
+
 	IEnumerator FadeOut(Image panel)
 	{
 		float	startTime = Time.time;

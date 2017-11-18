@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
 public class ReserachController : MonoBehaviour
@@ -12,11 +13,22 @@ public class ReserachController : MonoBehaviour
 	[Space, Header("Other settings")]
 	public Transform	groundCheckCenter;
 	public Vector2		groundCheckSize;
+	public float		groundCheckRadius = .1f;
+
+	[Space, Header("GUI settings")]
+	public GameObject	pickHelpText;
+	public float		popupShowTime = 1f;
+	public GameObject	pickUpPanel;
+	public Image		pickUpImage;
+	public Text			pickUpText;
 
 	Rigidbody2D			rbody;
 	bool				grounded = false;
+	bool				wantsJump = false;
 
 	Collider2D[]		overlapResults = new Collider2D[10];
+
+	List< Collider2D >	pickableObjects = new List< Collider2D >();
 
 	void Start ()
 	{
@@ -34,17 +46,59 @@ public class ReserachController : MonoBehaviour
 		}
 		GroundCheck();
 
-		if (grounded && Input.GetKeyDown(KeyCode.UpArrow))
+		if (wantsJump)
 		{
-			rbody.velocity = new Vector2(rbody.velocity.x, 0);
-			rbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+			wantsJump = false;
+			if (grounded)
+			{
+				rbody.velocity = new Vector2(rbody.velocity.x, 0);
+				rbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
+			}
 		}
+	}
+
+	void Update()
+	{
+		if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+			wantsJump = true;
+		
+		pickHelpText.SetActive(pickableObjects.Count != 0);
+	}
+
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		if (other.tag == "Obstacle")
+				SceneSwitcher.instance.ShowExploration();
+		
+		if (other.GetComponent< ItemBehaviour >() != null)
+			pickableObjects.Add(other);
+	}
+
+	void OnTriggerExit2D(Collider2D other)
+	{
+		if (other.GetComponent< ItemBehaviour >() != null)
+			pickableObjects.Remove(other);
+	}
+
+	public void ShowPickedObjectPopup(Item item)
+	{
+		pickUpPanel.SetActive(true);
+		pickUpImage.sprite = item.sprite;
+		pickUpText.text = "You picked " + item.name;
+
+		StartCoroutine(HidePopup());
+	}
+
+	IEnumerator HidePopup()
+	{
+		yield return new WaitForSeconds(popupShowTime);
+		pickUpPanel.SetActive(false);
 	}
 
 	void GroundCheck()
 	{
 		grounded = false;
-		int cols = Physics2D.OverlapCapsuleNonAlloc((Vector2)groundCheckCenter.position, groundCheckSize, CapsuleDirection2D.Horizontal, 0, overlapResults);
+		int cols = Physics2D.OverlapCircleNonAlloc((Vector2)groundCheckCenter.position, groundCheckRadius, overlapResults);
 		for (int i = 0; i < cols; i++)
 		{
 			var res = overlapResults[i];
@@ -59,6 +113,6 @@ public class ReserachController : MonoBehaviour
 
 	void OnDrawGizmos()
 	{
-		Gizmos.DrawSphere(groundCheckCenter.position, groundCheckSize.x);
+		Gizmos.DrawSphere(groundCheckCenter.position, groundCheckRadius);
 	}
 }
