@@ -21,4 +21,5 @@ public class Item
 {
 	public string	name;
 	public ItemType	type;
+	public Sprite	sprite;
 }

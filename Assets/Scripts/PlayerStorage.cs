@@ -19,6 +19,11 @@ public class PlayerStorage : MonoBehaviour
 		
 		playerItems.Add(item);
 	}
+
+	public List< Item > GetItems()
+	{
+		return playerItems;
+	}
 	
 	public static PlayerStorage instance { get; private set; }
 }
