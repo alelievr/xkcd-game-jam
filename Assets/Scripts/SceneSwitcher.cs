@@ -24,7 +24,7 @@ public class SceneSwitcher : MonoBehaviour {
 	public string historySceneName = "History";
 	public string explorationSceneName = "Exploration";
 	public string creditsSceneame = "Credits";
-	public string craftSceneName = "CreaftScreen";
+	public string craftSceneName = "CraftScreen";
 	public string travelSceneName = "Travel";
 
 	public static SceneSwitcher instance;
