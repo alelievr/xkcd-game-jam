@@ -22,7 +22,7 @@ public class ItemBehaviour : MonoBehaviour
 			playerNear = false;
 	}
 	
-	public void Update(Collider2D other)
+	public void Update()
 	{
 		if (playerNear && Input.GetKeyDown(KeyCode.Space))
 		{
