@@ -34,7 +34,7 @@ public class ReserachController : MonoBehaviour
 		}
 		GroundCheck();
 
-		if (grounded && Input.GetKeyDown(KeyCode.Space))
+		if (grounded && Input.GetKeyDown(KeyCode.UpArrow))
 		{
 			rbody.velocity = new Vector2(rbody.velocity.x, 0);
 			rbody.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse);
