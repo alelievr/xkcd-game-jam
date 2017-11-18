@@ -21,24 +21,36 @@ public class PlayerController : MonoBehaviour
 
 	[Space, Header("Falppy control settings")]
 	public float			flappyUpForce = 50;
+	public float			flappyTorque = 4;
 
 	[Space, Header("Balloon control settings")]
 	public float			balloonMaxHeight = 10;
 	public float			balloonStep = 2;
-	public GameObject		balloonSprite;
+	public GameObject		balloon;
 	public GameObject		feather;
 	public float			featherPower = 5;
 	public bool				haveFeather = false;
 
 	[Space, Header("Kite control settings")]
 	public GameObject		kite;
+	public Transform		kiteAnchor;
+	public float			kiteWirlRange = 3;
+	public float			kitePower = 2;
+	public float			kiteUpControlPower = 5;
+
+	[Space, Header("Tortoise control settings")]
+	public float			tortoiseSpeed = 10;
+	public GameObject		tortoise;
 
 	float					balloonUpVelocity = 50f;
 
 	bool					catapultThrowed = false;
 	Vector2					catapultDirection = Vector2.right;
+	
+	Rigidbody2D				tortoiseRigidbody;
 
 	Rigidbody2D				rbody;
+	new Collider2D			collider;
 	public bool				dead { get; private set; }
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
@@ -50,6 +62,7 @@ public class PlayerController : MonoBehaviour
 			return ;
 		
 		rbody = GetComponent< Rigidbody2D >();
+		collider = GetComponent< Collider2D >();
 		
 		controlActions[PlayerControl.Flappy] = UpdateFlappy;
 		controlActions[PlayerControl.Balloon] = UpdateBalloon;
@@ -59,7 +72,18 @@ public class PlayerController : MonoBehaviour
 
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
-		balloonSprite.SetActive(false);
+		balloon.SetActive(control == PlayerControl.Balloon);
+		kite.SetActive(control == PlayerControl.Kite);
+		tortoise.SetActive(control == PlayerControl.Tortoise);
+
+		tortoiseRigidbody = tortoise.GetComponent< Rigidbody2D >();
+
+		if (control == PlayerControl.Kite)
+		{
+			rbody.gravityScale = 0;
+			defaultWindForce = 0;
+			rbody.drag = 2;
+		}
 	}
 	
 	void Update ()
@@ -71,7 +95,6 @@ public class PlayerController : MonoBehaviour
 
 	void OnCollisionEnter2D(Collision2D other)
 	{
-		Debug.Log("tag: " + other.collider.tag);
 		switch (other.collider.tag)
 		{
 			case "Water":
@@ -100,30 +123,29 @@ public class PlayerController : MonoBehaviour
 		rbody.velocity = new Vector2(Mathf.Clamp(rbody.velocity.x, -maxXVelocity, maxXVelocity), rbody.velocity.y);
 	}
 
-	float verticalKeyDown { get { if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D)) return 1; if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A)) return -1; return 0; } }
-	float horizontalKeyDown { get { if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) return 1; if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) return -1; return 0; } }
+	float horizontalKeyDown { get { if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D)) return 1; if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A)) return -1; return 0; } }
+	float verticalKeyDown { get { if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) return 1; if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) return -1; return 0; } }
 
 	void UpdateFlappy()
 	{
-		float v = verticalKeyDown;
+		float v = horizontalKeyDown;
 		if (v != 0)
 		{
 			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
 			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
 			rbody.AddForce(transform.up * flappyUpForce, ForceMode2D.Impulse);
-			rbody.AddTorque(v * 4, ForceMode2D.Impulse);
+			rbody.AddTorque(v * flappyTorque, ForceMode2D.Impulse);
 		}
 	}
 
 	void UpdateBalloon()
 	{
-		balloonSprite.SetActive(true);
-		float v = horizontalKeyDown;
+		float v = verticalKeyDown;
 		if (v != 0)
 			balloonUpVelocity += balloonStep * v;
 		if (haveFeather)
 		{
-			v = verticalKeyDown;
+			v = horizontalKeyDown;
 			if (v != 0)
 				rbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
 		}
@@ -140,18 +162,34 @@ public class PlayerController : MonoBehaviour
 
 	void UpdateTortoise()
 	{
+		Vector3 force = Vector3.right * tortoiseSpeed * Time.deltaTime;
+		tortoise.transform.position += force;
+		transform.position += force;
 
+		float v;
+		if ((v = Input.GetAxis("Horizontal")) != 0)
+		{
+			collider.sharedMaterial.friction = 0;
+			rbody.velocity = new Vector2(v * 10, rbody.velocity.y);
+		}
+		else
+			collider.sharedMaterial.friction = 1;
 	}
 
 	void UpdateKite()
 	{
-		Vector2 startDirection = Vector3.zero - transform.position;
-		float v = verticalKeyDown;
-		rbody.gravityScale = 0;
+		Vector2 startDirection = (kiteAnchor.position - transform.position).normalized;
+		float v;
 		
+		if ((v = Input.GetAxisRaw("Horizontal")) != 0)
+			rbody.AddForce(-startDirection * kitePower * v, ForceMode2D.Impulse);
+
+		v = verticalKeyDown;
 		if (v != 0)
-		{
-		}
+			rbody.AddForce(Vector2.up * kiteUpControlPower * v, ForceMode2D.Impulse);
+
+		rbody.AddForce(Vector2.up * Mathf.Sin(Time.timeSinceLevelLoad / 1) * kiteWirlRange, ForceMode2D.Force);
+		Debug.DrawRay(transform.position, startDirection, Color.red);
 	}
 
 	void FixedUpdateBalloon()
