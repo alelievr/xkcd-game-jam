@@ -20,28 +20,31 @@ public class DialogScript : MonoBehaviour
 	void OnTriggerEnter2D(Collider2D other)
 	{
 		if (other.tag == "Player")
+		{
+			ShowDialog();
 			playerNear = true;
+		}
 	}
 
 	void OnTriggerExit2D(Collider2D other)
 	{
 		if (other.tag == "Player")
+		{
+			ShowDialog();
 			playerNear = false;
+		}
 	}
 
-	void Update()
+	void ShowDialog()
 	{
-		if (playerNear && Input.GetKeyDown(KeyCode.E))
+		if (dialogIndex == dialogs.Length)
 		{
-			if (dialogIndex == dialogs.Length)
-			{
-				dialogIndex = 0;
-				dialogPanel.SetActive(false);
-				return ;
-			}
-			dialogPanel.SetActive(true);
-			text.text = dialogs[dialogIndex];
-			dialogIndex++;
+			dialogIndex = 0;
+			dialogPanel.SetActive(false);
+			return ;
 		}
+		dialogPanel.SetActive(true);
+		text.text = dialogs[dialogIndex];
+		dialogIndex++;
 	}
 }
