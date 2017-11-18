@@ -4,4 +4,8 @@ using UnityEngine;
 
 public class ResearchGUI : MonoBehaviour
 {
+    public void SwitchToCraft()
+    {
+        SceneSwitcher.instance.ShowCraft();
+    }
 }
