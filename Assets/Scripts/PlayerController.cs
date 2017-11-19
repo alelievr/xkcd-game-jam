@@ -14,7 +14,7 @@ public enum PlayerControl
 	Kite,
 }
 
-public enum DeadType
+public enum DeathType
 {
 	Drawn,
 	Crashed,
@@ -22,9 +22,9 @@ public enum DeadType
 }
 
 [System.Serializable]
-public struct DeadTypeScreen
+public struct DeathTypeScreen
 {
-	public DeadType	type;
+	public DeathType	type;
 	public Sprite	sprite;
 }
 
@@ -43,14 +43,12 @@ public class PlayerController : MonoBehaviour
 	public float			balloonMaxHeight = 10;
 	public float			balloonStep = 2;
 	public GameObject		balloon;
-	public GameObject		feather;
 	public float			featherPower = 5;
 	public bool				haveFeather = false;
 	public float			maxBalloonVelocity = 60;
 	public float			minBalloonVelocity = 40;
 
 	[Space, Header("Kite control settings")]
-	public GameObject		kite;
 	public Transform		kiteAnchor;
 	public float			kiteWirlRange = 3;
 	public float			kitePower = 2;
@@ -58,7 +56,6 @@ public class PlayerController : MonoBehaviour
 
 	[Space, Header("Tortoise control settings")]
 	public float			tortoiseSpeed = 10;
-	public GameObject		tortoise;
 	public bool				haveCarrotOnStick;
 	
 	[Space, Header("Catapult control settings")]
@@ -71,10 +68,23 @@ public class PlayerController : MonoBehaviour
 	public Transform		doubleStickTop;
 	public Transform		spoonEndPosition;
 
+	[Space, Header("Squirrel animations")]
+	public GameObject		glidingSquirrelLeaf;
+	public GameObject		glidingSuirrelKite;
+	public GameObject		flappySquirrel;
+	public GameObject		halfFlappySquirrel;
+	public GameObject		balloonSquirrel;
+	public GameObject		balloonSquirrelLeaf;
+	public GameObject		balloonSquirrelFeather;
+	public GameObject		tortoiseSquirrel;
+	public GameObject		tortoiseSquirrelCarrotStick;
+
 	[Space, Header("Dead screens"), SerializeField]
-	public List< DeadTypeScreen >	deadScreens;
+	public List< DeathTypeScreen >	deadScreens;
 
 	float					balloonUpVelocity = 50f;
+
+	float					defaultGravityScale;
 
 	bool					catapultThrowed = false;
 	bool					parachuteTriggered = false;
@@ -88,10 +98,10 @@ public class PlayerController : MonoBehaviour
 	float					catapultPower = 40;
 
 	Rigidbody2D				rbody;
+	Animator				animator;
 	SpriteRenderer			spriteRenderer;
-	new Collider2D			collider;
 	public bool				dead { get; private set; }
-	DeadType				deadType;
+	DeathType				deathType;
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
 	Dictionary< PlayerControl, Action >	fixedControlActions = new Dictionary< PlayerControl, Action >();
@@ -104,7 +114,6 @@ public class PlayerController : MonoBehaviour
 		// SetControlFromEquipedItems();
 		
 		rbody = GetComponent< Rigidbody2D >();
-		collider = GetComponent< Collider2D >();
 		
 		controlActions[PlayerControl.Flappy] = UpdateFlappy;
 		controlActions[PlayerControl.Balloon] = UpdateBalloon;
@@ -117,36 +126,61 @@ public class PlayerController : MonoBehaviour
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
 		balloon.SetActive(control == PlayerControl.Balloon);
-		kite.SetActive(control == PlayerControl.Kite);
-		tortoise.SetActive(control == PlayerControl.Tortoise);
 
-		tortoiseRigidbody = tortoise.GetComponent< Rigidbody2D >();
 		squirrelBallRigidbody = squirrelBall.GetComponent< Rigidbody2D >();
 		spriteRenderer = GetComponent< SpriteRenderer >();
 
 		defaultSpoonPosition = catapultSpoon.transform.position;
 		defaultSquirrelbalPosition = squirrelBall.transform.position;
 
-		if (control == PlayerControl.Flappy || control == PlayerControl.FlappyOne)
-		{
-			rbody.constraints = RigidbodyConstraints2D.None;
-			collider.sharedMaterial.friction = 1;
-		}
+		defaultGravityScale = rbody.gravityScale;
 
-		if (control == PlayerControl.Kite)
+		switch (control)
 		{
-			rbody.gravityScale = 0;
-			defaultWindForce = 0;
-			rbody.drag = 2;
+			case PlayerControl.Flappy:
+				rbody.constraints = RigidbodyConstraints2D.None;
+				InstantiateSquirrel(flappySquirrel);
+				break ;
+			case PlayerControl.FlappyOne:
+				rbody.constraints = RigidbodyConstraints2D.None;
+				InstantiateSquirrel(halfFlappySquirrel);
+				break ;
+			case PlayerControl.Balloon:
+				if (haveLeaf)
+					InstantiateSquirrel(balloonSquirrelLeaf);
+				else if (haveFeather)
+					InstantiateSquirrel(balloonSquirrelFeather);
+				else
+					InstantiateSquirrel(balloonSquirrel);
+				break ;
+			case PlayerControl.Tortoise:
+				defaultWindForce = 0;
+				if (haveCarrotOnStick)
+					InstantiateSquirrel(tortoiseSquirrelCarrotStick);
+				else
+					InstantiateSquirrel(tortoiseSquirrel);
+				break ;
+			case PlayerControl.Kite:
+				rbody.gravityScale = 0;
+				defaultWindForce = 0;
+				rbody.drag = 2;
+				InstantiateSquirrel(glidingSuirrelKite);
+				break ;
+			case PlayerControl.Catapult:
+				catapult.SetActive(true);
+				squirrelBallRigidbody.isKinematic = true;
+				spriteRenderer.enabled = false;
+				rbody.isKinematic = true;
+				break ;
 		}
+	}
 
-		if (control == PlayerControl.Catapult)
-		{
-			catapult.SetActive(true);
-			squirrelBallRigidbody.isKinematic = true;
-			spriteRenderer.enabled = false;
-			rbody.isKinematic = true;
-		}
+	void InstantiateSquirrel(GameObject squirrelPrefab)
+	{
+		var visual = Instantiate(squirrelPrefab, transform) as GameObject;
+		visual.transform.localPosition = Vector3.zero;
+		visual.transform.localScale = Vector3.one * .2f;
+		animator = visual.GetComponent< Animator >();
 	}
 
 	void SetControlFromEquipedItems()
@@ -211,17 +245,35 @@ public class PlayerController : MonoBehaviour
 	{
 		switch (other.collider.tag)
 		{
-			case "Water":
-				deadType = DeadType.Drawn;
-				rbody.drag = 50;
-				Death();
-				break ;
 			case "Obstacle":
 				Death();
 				break ;
 			case "Ground":
+				Debug.Log("hit ground with velocity: " + rbody.velocity.magnitude);
 				if (rbody.velocity.magnitude > 10)
-					deadType = DeadType.Crashed;
+				{
+					deathType = DeathType.Crashed;
+					Death();
+				}
+				break ;
+		}
+	}
+
+	void OnTriggerEnter2D(Collider2D other)
+	{
+		switch (other.tag)
+		{
+			case "Water":
+				if (control == PlayerControl.Tortoise)
+				{
+					rbody.velocity = Vector2.zero;
+					rbody.gravityScale = 0;
+					return ;
+				}
+				deathType = DeathType.Drawn;
+				rbody.drag = 50;
+				rbody.gravityScale = defaultGravityScale;
+				Death();
 				break ;
 		}
 	}
@@ -236,7 +288,10 @@ public class PlayerController : MonoBehaviour
 	IEnumerator TitleScreenTimeout()
 	{
 		yield return new WaitForSeconds(1);
-		
+
+		Sprite deathSprite = deadScreens.Find(d => d.type == deathType).sprite;
+
+		SceneSwitcher.instance.ShowTitleScreen(deathSprite);
 	}
 
 	void FixedUpdate()
@@ -263,6 +318,10 @@ public class PlayerController : MonoBehaviour
 		float v = horizontalKeyDown;
 		if (v != 0)
 		{
+			if (v > 0)
+				animator.SetTrigger("flapRight");
+			else
+				animator.SetTrigger("flapLeft");
 			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
 			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
 			rbody.AddForce(transform.up * flappyUpForce, ForceMode2D.Impulse);
@@ -273,12 +332,13 @@ public class PlayerController : MonoBehaviour
 	void UpdateFlappyOne()
 	{
 		float v = horizontalKeyDown;
-		if (v < 0)
+		if (v > 0)
 		{
-			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
+			animator.SetTrigger("flapRight");
+			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * v, 0);
 			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
 			rbody.AddForce(transform.up * flappyUpForce, ForceMode2D.Impulse);
-			rbody.AddTorque(v * flappyTorque, ForceMode2D.Impulse);
+			rbody.AddTorque(-v * flappyTorque, ForceMode2D.Impulse);
 		}
 	}
 
@@ -301,8 +361,15 @@ public class PlayerController : MonoBehaviour
 		{
 			v = horizontalKeyDown;
 			if (v != 0)
+			{
+				animator.SetTrigger("flap");
 				rbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
+			}
 		}
+
+		Vector3 scale = transform.localScale;
+		scale.x = Mathf.Abs(scale.x) * Mathf.Sign(rbody.velocity.x);
+		transform.localScale = scale;
 	}
 
 	void UpdateCatapult()
@@ -374,21 +441,18 @@ public class PlayerController : MonoBehaviour
 		Vector3 force;
 		
 		if (haveCarrotOnStick)
+		{
+			animator.SetBool("crawling", true);
 			force = Vector3.right * tortoiseSpeed * Time.deltaTime;
+		}
 		else
 			force = Vector3.zero;
 		
-		tortoise.transform.position += force;
 		transform.position += force;
 
 		float v;
 		if ((v = Input.GetAxis("Horizontal")) != 0)
-		{
-			collider.sharedMaterial.friction = 0;
 			rbody.velocity = new Vector2(v * 10, rbody.velocity.y);
-		}
-		else
-			collider.sharedMaterial.friction = 1;
 	}
 
 	void UpdateKite()
