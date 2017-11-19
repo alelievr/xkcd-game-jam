@@ -1,9 +1,14 @@
 fileFormatVersion: 2
 guid: 8ac6ce83d8176474b86bf65d1f867986
-timeCreated: 1511098158
+timeCreated: 1511106248
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: cuttedSquirrelOnATortoise_0
+    21300002: cuttedSquirrelOnATortoise_1
+    21300004: cuttedSquirrelOnATortoise_2
+    21300006: cuttedSquirrelOnATortoise_3
+    21300008: cuttedSquirrelOnATortoise_4
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -40,7 +45,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -65,12 +70,91 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: cuttedSquirrelOnATortoise_0
+      rect:
+        serializedVersion: 2
+        x: 63
+        y: 353
+        width: 435
+        height: 244
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedSquirrelOnATortoise_1
+      rect:
+        serializedVersion: 2
+        x: 37
+        y: 162
+        width: 316
+        height: 144
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedSquirrelOnATortoise_2
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 59
+        width: 104
+        height: 95
+      alignment: 9
+      pivot: {x: 0.49038464, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedSquirrelOnATortoise_3
+      rect:
+        serializedVersion: 2
+        x: 200
+        y: 3.5
+        width: 128
+        height: 142
+      alignment: 9
+      pivot: {x: 0.5, y: 0.48591548}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedSquirrelOnATortoise_4
+      rect:
+        serializedVersion: 2
+        x: 323
+        y: 42
+        width: 118
+        height: 101
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
     outline: []
     physicsShape: []
   spritePackingTag: 
-  userData: 
+  userData: 99031856239262
   assetBundleName: 
   assetBundleVariant: 

@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: 3d5f5c6e3dc09664ea9501f6043d636b
-timeCreated: 1511098174
+timeCreated: 1511105742
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: cuttedBaloonSquirrel_0
+    21300002: cuttedBaloonSquirrel_1
+    21300004: cuttedBaloonSquirrel_2
+    21300006: cuttedBaloonSquirrel_3
+    21300008: cuttedBaloonSquirrel_4
+    21300010: cuttedBaloonSquirrel_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -40,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -65,12 +71,105 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_0
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 406
+        width: 111
+        height: 188
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_1
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 514
+        width: 366
+        height: 486
+      alignment: 9
+      pivot: {x: 0.5, y: 0.505144}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_2
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 39
+        width: 146
+        height: 331
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_3
+      rect:
+        serializedVersion: 2
+        x: 311
+        y: 326
+        width: 82
+        height: 123
+      alignment: 9
+      pivot: {x: 0.49999997, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_4
+      rect:
+        serializedVersion: 2
+        x: 219
+        y: 61.999992
+        width: 106
+        height: 223
+      alignment: 9
+      pivot: {x: 0.5, y: 0.50000006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedBaloonSquirrel_5
+      rect:
+        serializedVersion: 2
+        x: 391
+        y: 102
+        width: 78
+        height: 141
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
     outline: []
     physicsShape: []
   spritePackingTag: 
-  userData: 
+  userData: 99031775154769
   assetBundleName: 
   assetBundleVariant: 

@@ -1,9 +1,15 @@
 fileFormatVersion: 2
 guid: cfa5d15264a0d8c4ab0d8f36b8472260
-timeCreated: 1511098166
+timeCreated: 1511103252
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: cuttedFlyingSquirrel_0
+    21300002: cuttedFlyingSquirrel_1
+    21300004: cuttedFlyingSquirrel_2
+    21300006: cuttedFlyingSquirrel_3
+    21300008: cuttedFlyingSquirrel_4
+    21300010: cuttedFlyingSquirrel_5
   externalObjects: {}
   serializedVersion: 4
   mipmaps:
@@ -40,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -65,12 +71,105 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+  - buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_0
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 530
+        width: 261
+        height: 405
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_1
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 1086
+        width: 386
+        height: 406
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_2
+      rect:
+        serializedVersion: 2
+        x: 533
+        y: 261
+        width: 117
+        height: 280
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_3
+      rect:
+        serializedVersion: 2
+        x: 689
+        y: 558
+        width: 232
+        height: 555
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_4
+      rect:
+        serializedVersion: 2
+        x: 902
+        y: 327
+        width: 172
+        height: 246
+      alignment: 9
+      pivot: {x: 0.5, y: 0.49999997}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: cuttedFlyingSquirrel_5
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 1108
+        width: 356
+        height: 457
+      alignment: 9
+      pivot: {x: 0.61095506, y: 0.4868709}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
     outline: []
     physicsShape: []
   spritePackingTag: 
-  userData: 
+  userData: 99031649513722
   assetBundleName: 
   assetBundleVariant: 
