@@ -9,7 +9,7 @@ public class DialogScript : MonoBehaviour
 	public string[]		dialogs;
 	public GameObject	dialogPanel;
 	public Text			text;
-	bool				playerNear = false;
+	// bool				playerNear = false;
 	int					dialogIndex = 0;
 
 	void Start()
@@ -22,7 +22,7 @@ public class DialogScript : MonoBehaviour
 		if (other.tag == "Player")
 		{
 			ShowDialog();
-			playerNear = true;
+			// playerNear = true;
 		}
 	}
 
@@ -31,7 +31,7 @@ public class DialogScript : MonoBehaviour
 		if (other.tag == "Player")
 		{
 			ShowDialog();
-			playerNear = false;
+			// playerNear = false;
 		}
 	}
 

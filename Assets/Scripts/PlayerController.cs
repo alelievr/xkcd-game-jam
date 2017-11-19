@@ -43,15 +43,32 @@ public class PlayerController : MonoBehaviour
 	[Space, Header("Tortoise control settings")]
 	public float			tortoiseSpeed = 10;
 	public GameObject		tortoise;
+	
+	[Space, Header("Catapult control settings")]
+	public bool				haveLeaf = false;
+	public float			baseCatapultPower = 30;
+	public GameObject		catapult;
+	public GameObject		catapultSpoon;
+	public GameObject		squirrelBall;
+	public GameObject		arrow;
+	public Transform		doubleStickTop;
+	public Transform		spoonEndPosition;
 
 	float					balloonUpVelocity = 50f;
 
 	bool					catapultThrowed = false;
+	bool					parachuteTriggered = false;
 	Vector2					catapultDirection = Vector2.right;
 	
 	Rigidbody2D				tortoiseRigidbody;
+	
+	Rigidbody2D				squirrelBallRigidbody;
+	Vector3					defaultSpoonPosition;
+	Vector3					defaultSquirrelbalPosition;
+	float					catapultPower = 40;
 
 	Rigidbody2D				rbody;
+	SpriteRenderer			spriteRenderer;
 	new Collider2D			collider;
 	public bool				dead { get; private set; }
 
@@ -79,12 +96,24 @@ public class PlayerController : MonoBehaviour
 		tortoise.SetActive(control == PlayerControl.Tortoise);
 
 		tortoiseRigidbody = tortoise.GetComponent< Rigidbody2D >();
+		squirrelBallRigidbody = squirrelBall.GetComponent< Rigidbody2D >();
+		spriteRenderer = GetComponent< SpriteRenderer >();
+
+		defaultSpoonPosition = catapultSpoon.transform.position;
+		defaultSquirrelbalPosition = squirrelBall.transform.position;
 
 		if (control == PlayerControl.Kite)
 		{
 			rbody.gravityScale = 0;
 			defaultWindForce = 0;
 			rbody.drag = 2;
+		}
+
+		if (control == PlayerControl.Catapult)
+		{
+			squirrelBallRigidbody.isKinematic = true;
+			spriteRenderer.enabled = false;
+			rbody.isKinematic = true;
 		}
 	}
 	
@@ -157,17 +186,66 @@ public class PlayerController : MonoBehaviour
 		{
 			v = horizontalKeyDown;
 			if (v != 0)
-				rbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
+				squirrelBallRigidbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
 		}
 	}
 
 	void UpdateCatapult()
 	{
-		if (Input.GetKeyDown(KeyCode.Return))
+		float v;
+
+		if (!catapultThrowed)
 		{
-			catapultThrowed = true;
-			rbody.AddForce(catapultDirection, ForceMode2D.Impulse);
+			//calcul spoon position and so catapult power+
+			Vector3 decal = new Vector3(1, .5f) * (Mathf.Sin(Time.timeSinceLevelLoad) - 1.5f);
+			catapultSpoon.transform.position = defaultSpoonPosition + decal;
+			squirrelBall.transform.position = defaultSquirrelbalPosition + decal;
+
+			catapultDirection = doubleStickTop.position - squirrelBall.transform.position;
+
+			if ((v = verticalKeyDown) != 0)
+			{
+				decal = Vector3.up * v * 0.2f;
+				defaultSpoonPosition += decal;
+				defaultSquirrelbalPosition += decal;
+			}
+
+			//Update arrow visu:
+			float rot_z = Mathf.Atan2(catapultDirection.y, catapultDirection.x) * Mathf.Rad2Deg;
+        	arrow.transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
+			var scale = arrow.transform.localScale;
+			catapultPower = baseCatapultPower * catapultDirection.magnitude / 4;
+			scale.y = catapultDirection.magnitude / 5;
+			arrow.transform.localScale = scale;
+			
+			if (Input.GetKeyDown(KeyCode.Return))
+			{
+				catapultThrowed = true;
+				StartCoroutine(MoveSpoonToDoubleStick());
+			}
 		}
+		if (catapultThrowed && haveLeaf)
+		{
+			if (Input.GetKeyDown(KeyCode.Space))
+				parachuteTriggered = true;
+		}
+		if (parachuteTriggered)
+		{
+			//decrease velocity and give a bit of left/right control
+		}
+	}
+
+	IEnumerator MoveSpoonToDoubleStick()
+	{
+		while ((catapultSpoon.transform.position - spoonEndPosition.position).magnitude > .1f)
+		{
+			Vector3 tmp = catapultSpoon.transform.position;
+			catapultSpoon.transform.position = Vector3.MoveTowards(catapultSpoon.transform.position, spoonEndPosition.position, .3f);
+			squirrelBall.transform.position += catapultSpoon.transform.position - tmp;
+			yield return null;
+		}
+		squirrelBallRigidbody.isKinematic = false;
+		squirrelBallRigidbody.AddForce(catapultDirection * catapultPower, ForceMode2D.Impulse);
 	}
 
 	void UpdateTortoise()
