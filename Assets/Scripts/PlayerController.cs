@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
 {
 	[Header("Global settings")]
 	public PlayerControl	control;
-	public float			defaultWindForce = 1f;
+	public float			defaultWindForce = -1f;
 	public float			maxXVelocity = 3f;
 
 	[Space, Header("Falppy control settings")]
@@ -53,6 +53,7 @@ public class PlayerController : MonoBehaviour
 	public float			kiteWirlRange = 3;
 	public float			kitePower = 2;
 	public float			kiteUpControlPower = 5;
+	public LineRenderer		kiteLine;
 
 	[Space, Header("Tortoise control settings")]
 	public float			tortoiseSpeed = 10;
@@ -133,6 +134,8 @@ public class PlayerController : MonoBehaviour
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
 		balloon.SetActive(control == PlayerControl.Balloon);
+		kiteAnchor.gameObject.SetActive(control == PlayerControl.Kite);
+		kiteLine.SetPosition(0, kiteAnchor.position);
 
 		switch (control)
 		{
@@ -198,12 +201,12 @@ public class PlayerController : MonoBehaviour
 			case TravelType.Balloon:
 				control = PlayerControl.Balloon;
 				break ;
-			case TravelType.BalloonAndFeather1:
-			case TravelType.BalloonAndFeather2:
+			case TravelType.BalloonAndStringAndFeather1:
+			case TravelType.BalloonAndStringAndFeather2:
 				control = PlayerControl.Balloon;
 				haveFeather = true;
 				break ;
-			case TravelType.BalloonAndLeaf:
+			case TravelType.BalloonAndStringAndLeaf:
 				control = PlayerControl.Balloon;
 				haveLeaf = true;
 				break ;
@@ -256,8 +259,8 @@ public class PlayerController : MonoBehaviour
 				Death();
 				break ;
 			case "Ground":
-				Debug.Log("hit ground with velocity: " + rbody.velocity.magnitude);
-				if (rbody.velocity.magnitude > 10)
+				Debug.Log("hit ground with velocity: " + other.relativeVelocity.magnitude);
+				if (other.relativeVelocity.magnitude > 8)
 				{
 					audioSource.PlayOneShot(crash);
 					deathType = DeathType.Crashed;
@@ -478,10 +481,6 @@ public class PlayerController : MonoBehaviour
 		}
 		
 		transform.position += force;
-
-		float v;
-		if ((v = Input.GetAxis("Horizontal")) != 0)
-			rbody.velocity = new Vector2(v * 10, rbody.velocity.y);
 	}
 
 	void UpdateKite()
@@ -489,6 +488,8 @@ public class PlayerController : MonoBehaviour
 		Vector2 startDirection = (kiteAnchor.position - transform.position).normalized;
 		float v;
 		
+		kiteLine.SetPosition(1, transform.position);
+
 		if ((v = Input.GetAxisRaw("Horizontal")) != 0)
 			rbody.AddForce(-startDirection * kitePower * v, ForceMode2D.Impulse);
 
@@ -496,7 +497,8 @@ public class PlayerController : MonoBehaviour
 		if (v != 0)
 			rbody.AddForce(Vector2.up * kiteUpControlPower * v, ForceMode2D.Impulse);
 
-		rbody.AddForce(Vector2.up * Mathf.Sin(Time.timeSinceLevelLoad / 1) * kiteWirlRange, ForceMode2D.Force);
+		float whirl = Mathf.Sin(Time.timeSinceLevelLoad / .9f) * kiteWirlRange * (1 + Vector3.Distance(kiteAnchor.position, transform.position) / 20);
+		rbody.AddForce(Vector2.up * whirl, ForceMode2D.Force);
 		Debug.DrawRay(transform.position, startDirection, Color.red);
 	}
 

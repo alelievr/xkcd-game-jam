@@ -8,9 +8,9 @@ public enum TravelType
 {
 	None,
 	Balloon,
-	BalloonAndFeather1,
-	BalloonAndFeather2,
-	BalloonAndLeaf,
+	BalloonAndStringAndFeather1,
+	BalloonAndStringAndFeather2,
+	BalloonAndStringAndLeaf,
 	Feathers,
 	Feather1,
 	Feather2,
@@ -53,9 +53,9 @@ public class GUIListItems : MonoBehaviour
 	Dictionary< TravelType, List< ItemType > > itemsToTravelType = new Dictionary< TravelType, List< ItemType > >()
 	{
 		{TravelType.Balloon, new List< ItemType >(){ItemType.Baloon}},
-		{TravelType.BalloonAndFeather1, new List< ItemType >(){ItemType.Baloon, ItemType.Feather1}},
-		{TravelType.BalloonAndFeather2, new List< ItemType >(){ItemType.Baloon, ItemType.Feather2}},
-		{TravelType.BalloonAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.BigLeaf}},
+		{TravelType.BalloonAndStringAndFeather1, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.Feather1}},
+		{TravelType.BalloonAndStringAndFeather2, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.Feather2}},
+		{TravelType.BalloonAndStringAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.BigLeaf}},
 		{TravelType.Feathers, new List< ItemType >(){ItemType.Feather1, ItemType.Feather2}},
 		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1}},
 		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2}},

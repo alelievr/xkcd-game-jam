@@ -320,7 +320,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1062012188784578}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.0399971, y: -1.5800011, z: 0}
+  m_LocalPosition: {x: 0.075, y: -1.153, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4447875214431422}
@@ -471,9 +471,9 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869208767
+  m_SortingLayer: 1
+  m_SortingOrder: 100
 --- !u!33 &33355030256027776
 MeshFilter:
   m_ObjectHideFlags: 1
@@ -513,9 +513,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.21966413, y: 0.24309039}
+  m_Offset: {x: 0.21966413, y: 0.58332026}
   serializedVersion: 2
-  m_Radius: 1.9533849
+  m_Radius: 1.613155
 --- !u!81 &81928466151430444
 AudioListener:
   m_ObjectHideFlags: 1
@@ -672,8 +672,8 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingOrder: 99
   m_Bones: []
   m_BoneTransforms:
   - {fileID: 4767292589650110}
@@ -720,8 +720,8 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingOrder: 99
   m_Bones: []
   m_BoneTransforms:
   - {fileID: 4911535024392260}
@@ -744,8 +744,8 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingOrder: 99
   m_Bones: []
   m_BoneTransforms:
   - {fileID: 4814411320440254}
@@ -839,8 +839,8 @@ MonoBehaviour:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -1869208767
+  m_SortingOrder: 100
   m_Bones: []
   m_BoneTransforms: []
 --- !u!114 &114894895113753930
@@ -890,9 +890,9 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingLayer: 1
+  m_SortingOrder: 99
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -941,9 +941,9 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingLayer: 1
+  m_SortingOrder: 99
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -988,9 +988,9 @@ SkinnedMeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1869208767
+  m_SortingLayer: 1
+  m_SortingOrder: 99
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0

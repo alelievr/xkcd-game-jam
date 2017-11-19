@@ -41,7 +41,7 @@ public class SceneSwitcher : MonoBehaviour {
 		if (deadScreen == null)
 			StartCoroutine(FadeScene(titleScreenSceneName));
 		else
-			StartCoroutine(FadeSceneWithSprite(titleScreenSceneName, deadScreen));
+			StartCoroutine(FadeSceneWithSprite(titleScreenSceneName, deadScreen, 4f));
 	}
 
 	public void ShowHistory()
@@ -152,7 +152,7 @@ public class SceneSwitcher : MonoBehaviour {
 		yield return FadeOut(panel);
 	}
 
-	IEnumerator FadeSceneWithSprite(string sceneName, Sprite sprite)
+	IEnumerator FadeSceneWithSprite(string sceneName, Sprite sprite, float time = 2)
 	{
 		Image panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
 		yield return FadeIn(panel);
@@ -161,7 +161,7 @@ public class SceneSwitcher : MonoBehaviour {
 		spritePanel.sprite = sprite;
 		yield return FadeIn(spritePanel);
 
-		yield return new WaitForSeconds(2);
+		yield return new WaitForSeconds(time);
 		
 		SceneManager.LoadScene(sceneName);
 
