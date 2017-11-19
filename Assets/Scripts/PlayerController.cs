@@ -5,7 +5,9 @@ using System;
 
 public enum PlayerControl
 {
+	None,
 	Flappy,
+	FlappyOne,
 	Balloon,
 	Catapult,
 	Tortoise,
@@ -43,6 +45,7 @@ public class PlayerController : MonoBehaviour
 	[Space, Header("Tortoise control settings")]
 	public float			tortoiseSpeed = 10;
 	public GameObject		tortoise;
+	public bool				haveCarrotOnStick;
 	
 	[Space, Header("Catapult control settings")]
 	public bool				haveLeaf = false;
@@ -79,6 +82,8 @@ public class PlayerController : MonoBehaviour
 	{
 		if (dead)
 			return ;
+
+		// SetControlFromEquipedItems();
 		
 		rbody = GetComponent< Rigidbody2D >();
 		collider = GetComponent< Collider2D >();
@@ -88,6 +93,8 @@ public class PlayerController : MonoBehaviour
 		controlActions[PlayerControl.Catapult] = UpdateCatapult;
 		controlActions[PlayerControl.Kite] = UpdateKite;
 		controlActions[PlayerControl.Tortoise] = UpdateTortoise;
+		controlActions[PlayerControl.None] = UpdateNone;
+		controlActions[PlayerControl.FlappyOne] = UpdateFlappyOne;
 
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
@@ -102,7 +109,7 @@ public class PlayerController : MonoBehaviour
 		defaultSpoonPosition = catapultSpoon.transform.position;
 		defaultSquirrelbalPosition = squirrelBall.transform.position;
 
-		if (control == PlayerControl.Flappy)
+		if (control == PlayerControl.Flappy || control == PlayerControl.FlappyOne)
 		{
 			rbody.constraints = RigidbodyConstraints2D.None;
 			collider.sharedMaterial.friction = 1;
@@ -121,6 +128,54 @@ public class PlayerController : MonoBehaviour
 			squirrelBallRigidbody.isKinematic = true;
 			spriteRenderer.enabled = false;
 			rbody.isKinematic = true;
+		}
+	}
+
+	void SetControlFromEquipedItems()
+	{
+		switch (PlayerStorage.instance.travelType)
+		{
+			case TravelType.Balloon:
+				control = PlayerControl.Balloon;
+				break ;
+			case TravelType.BalloonAndFeather1:
+			case TravelType.BalloonAndFeather2:
+				control = PlayerControl.Balloon;
+				haveFeather = true;
+				break ;
+			case TravelType.BalloonAndLeaf:
+				control = PlayerControl.Balloon;
+				haveLeaf = true;
+				break ;
+			case TravelType.Feather1:
+			case TravelType.Feather2:
+				control = PlayerControl.FlappyOne;
+				break ;
+			case TravelType.Feathers:
+				control = PlayerControl.Flappy;
+				break ;
+			case TravelType.KiteAndFriendAndString:
+				control = PlayerControl.Kite;
+				break ;
+			case TravelType.SpoonAndElastic:
+				control = PlayerControl.Catapult;
+				break ;
+			case TravelType.SpoonAndElasticAndLeaf:
+				control = PlayerControl.Catapult;
+				haveLeaf = true;
+				break ;
+			case TravelType.Tortoise:
+				control = PlayerControl.Tortoise;
+				defaultWindForce = 0;
+				break ;
+			case TravelType.TortoiseAndCarrotAndString:
+				control = PlayerControl.Tortoise;
+				defaultWindForce = 0;
+				haveCarrotOnStick = true;
+				break ;
+			default:
+				control = PlayerControl.None;
+				break ;
 		}
 	}
 	
@@ -164,10 +219,27 @@ public class PlayerController : MonoBehaviour
 	float horizontalKeyDown { get { if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D)) return 1; if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A)) return -1; return 0; } }
 	float verticalKeyDown { get { if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) return 1; if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) return -1; return 0; } }
 
+	void UpdateNone()
+	{
+		
+	}
+
 	void UpdateFlappy()
 	{
 		float v = horizontalKeyDown;
 		if (v != 0)
+		{
+			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
+			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
+			rbody.AddForce(transform.up * flappyUpForce, ForceMode2D.Impulse);
+			rbody.AddTorque(v * flappyTorque, ForceMode2D.Impulse);
+		}
+	}
+
+	void UpdateFlappyOne()
+	{
+		float v = horizontalKeyDown;
+		if (v < 0)
 		{
 			rbody.velocity = new Vector2(Mathf.Abs(rbody.velocity.x) * -v, 0);
 			Debug.DrawLine(transform.position, transform.position + transform.up, Color.blue, 1);
@@ -265,7 +337,13 @@ public class PlayerController : MonoBehaviour
 
 	void UpdateTortoise()
 	{
-		Vector3 force = Vector3.right * tortoiseSpeed * Time.deltaTime;
+		Vector3 force;
+		
+		if (haveCarrotOnStick)
+			force = Vector3.right * tortoiseSpeed * Time.deltaTime;
+		else
+			force = Vector3.zero;
+		
 		tortoise.transform.position += force;
 		transform.position += force;
 

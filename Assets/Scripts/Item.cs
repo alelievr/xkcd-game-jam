@@ -10,10 +10,12 @@ public enum ItemType
 	kite,
 	FriendSquirel,
 	Spoon,
-	Feathers,
+	Feather1,
+	Feather2,
 	Elastic,
 	BigLeaf,
 	Baloon,
+	Any,
 }
 
 [System.Serializable]

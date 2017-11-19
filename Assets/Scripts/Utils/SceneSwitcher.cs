@@ -20,12 +20,12 @@ public class SceneSwitcher : MonoBehaviour {
 	public AnimationCurve	fadeCurve;
 	public AudioSource		fadeAudioSource;
 
-	public string titleScreenSceneName = "TitleScreen";
-	public string historySceneName = "History";
-	public string explorationSceneName = "Exploration";
-	public string creditsSceneame = "Credits";
-	public string craftSceneName = "CraftScreen";
-	public string travelSceneName = "Travel";
+	const string titleScreenSceneName = "TitleScreen";
+	const string historySceneName = "History";
+	const string explorationSceneName = "Exploration";
+	const string creditsSceneame = "Credits";
+	const string craftSceneName = "CreaftScreen";
+	const string travelSceneName = "Travel";
 
 	public static SceneSwitcher instance;
 
@@ -50,9 +50,12 @@ public class SceneSwitcher : MonoBehaviour {
 		StartCoroutine(FadeScene(explorationSceneName));
 	}
 
-	public void ShowTravel()
+	public void ShowTravel(Sprite transition)
 	{
-		StartCoroutine(FadeScene(travelSceneName));
+		if (transition == null)
+			StartCoroutine(FadeScene(travelSceneName));
+		else
+			StartCoroutine(FadeSceneWithSprite(travelSceneName, transition));
 	}
 
 	public void ShowCraft()
@@ -90,7 +93,7 @@ public class SceneSwitcher : MonoBehaviour {
 				SceneSwitcher.instance.ShowTitleScreen();
 				break ;
 			case Scene.Travel:
-				SceneSwitcher.instance.ShowTravel();
+				SceneSwitcher.instance.ShowTravel(null);
 				break ;
 		}
 	}
@@ -99,6 +102,7 @@ public class SceneSwitcher : MonoBehaviour {
 	{
 		float	startTime = Time.time;
 		float	alpha;
+		Color	defaultColor = panel.color;
 		
 		do
 		{
@@ -107,7 +111,7 @@ public class SceneSwitcher : MonoBehaviour {
 			if (fadeAudioSource != null)
 				fadeAudioSource.volume = 1 - alpha;
 			if (panel != null)
-				panel.color = new Color(0, 0, 0, alpha);
+				panel.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, alpha);
 			yield return null;
 		} while (alpha > 0f);
 	}
@@ -116,6 +120,7 @@ public class SceneSwitcher : MonoBehaviour {
 	{
 		float	startTime = Time.time;
 		float	alpha;
+		Color	defaultColor = panel.color;
 		
 		do
 		{
@@ -124,7 +129,7 @@ public class SceneSwitcher : MonoBehaviour {
 			if (fadeAudioSource != null)
 				fadeAudioSource.volume = 1 - alpha;
 			if (panel != null)
-				panel.color = new Color(0, 0, 0, alpha);
+				panel.color = new Color(defaultColor.r, defaultColor.g, defaultColor.b, alpha);
 			yield return null;
 		} while (alpha < 1f);
 	}
@@ -135,6 +140,23 @@ public class SceneSwitcher : MonoBehaviour {
 		yield return FadeIn(panel);
 		
 		SceneManager.LoadScene(sceneName);
+
+		panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
+		yield return FadeOut(panel);
+	}
+
+	IEnumerator FadeSceneWithSprite(string sceneName, Sprite sprite)
+	{
+		Image panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
+		yield return FadeIn(panel);
+
+		Image spritePanel = GameObject.Find("fullScreenSprite").GetComponent< Image >();
+		spritePanel.sprite = sprite;
+		yield return FadeOut(spritePanel);
+
+		yield return new WaitForSeconds(2);
+		
+		SceneManager.LoadScene(travelSceneName);
 
 		panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
 		yield return FadeOut(panel);

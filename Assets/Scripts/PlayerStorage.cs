@@ -7,15 +7,11 @@ public class PlayerStorage : MonoBehaviour
 {
 	List< Item >					playerItems = new List< Item >();
 	public Dictionary< int, Item >	equipedItems = new Dictionary< int, Item >();
+	public TravelType				travelType;
+	public Item						catapultSecondItem;
 
 	void Awake()
 	{
-		Item i = new Item();
-		i.name = "f";
-		i.sprite = UnityEditor.AssetDatabase.LoadAssetAtPath< Sprite >("Assets/Sprites/items/balloon.png");
-		i.type = ItemType.Baloon;
-
-		playerItems.Add(i);
 		instance = this;
 	}
 
@@ -29,6 +25,7 @@ public class PlayerStorage : MonoBehaviour
 
 	public List< Item > GetItems()
 	{
+		Debug.Log("items: " + playerItems.Count);
 		return playerItems;
 	}
 	

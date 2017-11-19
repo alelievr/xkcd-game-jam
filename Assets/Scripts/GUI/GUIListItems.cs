@@ -4,9 +4,39 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
 
+public enum TravelType
+{
+	None,
+	Balloon,
+	BalloonAndFeather1,
+	BalloonAndFeather2,
+	BalloonAndLeaf,
+	Feathers,
+	Feather1,
+	Feather2,
+	SpoonAndElastic,
+	SpoonAndElasticAndLeaf,
+	KiteAndFriendAndString,
+	Kite,
+	TortoiseAndCarrotAndString,
+	Tortoise,
+}
+
+[System.Serializable]
+public struct TravelTypeTransition
+{
+	public TravelType	type;
+	public Sprite		sprite;
+}
+
 public class GUIListItems : MonoBehaviour
 {
 	public Image[]	equipedImages;
+
+	public Sprite	notWorkingSprite;
+
+	[SerializeField]
+	public List< TravelTypeTransition > travelTransitions;
 
 	public Button	tryButton;
 	public Button	backToResearch;
@@ -15,12 +45,26 @@ public class GUIListItems : MonoBehaviour
 
 	Sprite	defaultEquipedSprite;
 
+	Dictionary< TravelType, List< ItemType > > itemsToTravelType = new Dictionary< TravelType, List< ItemType > >()
+	{
+		{TravelType.Balloon, new List< ItemType >(){ItemType.Baloon}},
+		{TravelType.BalloonAndFeather1, new List< ItemType >(){ItemType.Baloon, ItemType.Feather1}},
+		{TravelType.BalloonAndFeather2, new List< ItemType >(){ItemType.Baloon, ItemType.Feather2}},
+		{TravelType.BalloonAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.BigLeaf}},
+		{TravelType.Feathers, new List< ItemType >(){ItemType.Feather1, ItemType.Feather2}},
+		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1}},
+		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2}},
+		{TravelType.SpoonAndElastic, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.Any}},
+		{TravelType.SpoonAndElasticAndLeaf, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.BigLeaf}},
+		{TravelType.KiteAndFriendAndString, new List< ItemType >(){ItemType.kite, ItemType.FriendSquirel, ItemType.String}},
+		{TravelType.Kite, new List< ItemType >(){ItemType.kite}},
+		{TravelType.TortoiseAndCarrotAndString, new List< ItemType >(){ItemType.Tortoise, ItemType.Carrot, ItemType.String}},
+		{TravelType.Tortoise, new List< ItemType >(){ItemType.Tortoise}},
+	};
+
 	// Use this for initialization
 	void Start () {
 		images = GetComponentsInChildren< Image >();
-
-		foreach (var a in images)
-			Debug.Log(a);
 
 		int i = 0;
 		PlayerStorage.instance.equipedItems.Clear();
@@ -29,9 +73,43 @@ public class GUIListItems : MonoBehaviour
 
 		defaultEquipedSprite = equipedImages[0].sprite;
 
-		tryButton.onClick.AddListener(() => SceneSwitcher.instance.ShowTravel());
+		tryButton.onClick.AddListener(() => ShowTravel());
 		tryButton.interactable = false;
 		backToResearch.onClick.AddListener(() => SceneSwitcher.instance.ShowExploration());
+	}
+
+	public void ShowTravel()
+	{
+		//item configs:
+		var equipedItems = PlayerStorage.instance.equipedItems;
+
+		PlayerStorage.instance.travelType = TravelType.None;
+		foreach (var kp in itemsToTravelType)
+		{
+			if (kp.Value.All(itemType => equipedItems.Any(e => itemType == ItemType.Any || itemType == e.Value.type)))
+			{
+				PlayerStorage.instance.travelType = kp.Key;
+				break ;
+			}
+		}
+
+		if (PlayerStorage.instance.travelType == TravelType.SpoonAndElastic)
+		{
+			PlayerStorage.instance.catapultSecondItem = null;
+
+			foreach (var ei in equipedItems)
+				if (ei.Value.type != ItemType.Spoon && ei.Value.type != ItemType.Elastic)
+					PlayerStorage.instance.catapultSecondItem = ei.Value;
+		}
+
+		var transitionSprites = travelTransitions.Where(t => t.type == PlayerStorage.instance.travelType).Select(t => t.sprite);
+		Debug.Log(transitionSprites.Count() + " sprites found for type: " + PlayerStorage.instance.travelType);
+		Sprite transitionSprite = (transitionSprites.Count() != 0) ? transitionSprites.First() : null; 
+
+		if (transitionSprite == null)
+			transitionSprite = notWorkingSprite;
+
+		SceneSwitcher.instance.ShowTravel(transitionSprite);
 	}
 
 	public void OnItemClick(int index)
