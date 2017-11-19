@@ -35,9 +35,12 @@ public class SceneSwitcher : MonoBehaviour {
 		DontDestroyOnLoad(this);
 	}
 
-	public void ShowTitleScreen()
+	public void ShowTitleScreen(Sprite deadScreen)
 	{
-		StartCoroutine(FadeScene(titleScreenSceneName));
+		if (deadScreen == null)
+			StartCoroutine(FadeScene(titleScreenSceneName));
+		else
+			StartCoroutine(FadeSceneWithSprite(titleScreenSceneName, deadScreen));
 	}
 
 	public void ShowHistory()
@@ -90,7 +93,7 @@ public class SceneSwitcher : MonoBehaviour {
 				SceneSwitcher.instance.ShowHistory();
 				break ;
 			case Scene.TitleScreen:
-				SceneSwitcher.instance.ShowTitleScreen();
+				SceneSwitcher.instance.ShowTitleScreen(null);
 				break ;
 			case Scene.Travel:
 				SceneSwitcher.instance.ShowTravel(null);

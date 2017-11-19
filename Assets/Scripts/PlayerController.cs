@@ -133,6 +133,9 @@ public class PlayerController : MonoBehaviour
 
 	void SetControlFromEquipedItems()
 	{
+		if (PlayerStorage.instance == null)
+			return ;
+		
 		switch (PlayerStorage.instance.travelType)
 		{
 			case TravelType.Balloon:
@@ -192,6 +195,7 @@ public class PlayerController : MonoBehaviour
 		{
 			case "Water":
 				Death();
+				rbody.drag = 50;
 				break ;
 			case "Obstacle":
 				Death();
@@ -203,6 +207,13 @@ public class PlayerController : MonoBehaviour
 	{
 		Debug.Log("you're dead");
 		dead = true;
+		StartCoroutine(TitleScreenTimeout());
+	}
+
+	IEnumerator TitleScreenTimeout()
+	{
+		yield return new WaitForSeconds(1);
+		
 	}
 
 	void FixedUpdate()
