@@ -22106,6 +22106,25 @@ Prefab:
       propertyPath: crash
       value: 
       objectReference: {fileID: 8300000, guid: 252850556771f394794895e717e901e5, type: 3}
+    - target: {fileID: 1315537507152200, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: haveFeather
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: haveLeaf
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: control
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
   m_IsPrefabParent: 0

@@ -37,6 +37,7 @@ public class SceneSwitcher : MonoBehaviour {
 
 	public void ShowTitleScreen(Sprite deadScreen)
 	{
+		Debug.Log("show title screen: " + titleScreenSceneName);
 		if (deadScreen == null)
 			StartCoroutine(FadeScene(titleScreenSceneName));
 		else
@@ -101,16 +102,19 @@ public class SceneSwitcher : MonoBehaviour {
 		}
 	}
 
-	IEnumerator FadeOut(Image panel)
+	IEnumerator FadeOut(Image panel, Image spriteImage = null)
 	{
 		float	startTime = Time.time;
 		float	alpha;
 		Color	defaultColor = panel.color;
+		Color	spriteColor = (spriteImage != null) ? spriteImage.color : Color.white;
 		
 		do
 		{
 			alpha = 1 - ((Time.time - startTime) / fadeTime);
 			alpha = fadeCurve.Evaluate(alpha);
+			if (spriteImage != null)
+				spriteImage.color = new Color(spriteColor.r, spriteColor.g, spriteColor.b, alpha);
 			if (fadeAudioSource != null)
 				fadeAudioSource.volume = 1 - alpha;
 			if (panel != null)
@@ -155,14 +159,14 @@ public class SceneSwitcher : MonoBehaviour {
 
 		Image spritePanel = GameObject.Find("fullScreenSprite").GetComponent< Image >();
 		spritePanel.sprite = sprite;
-		yield return FadeOut(spritePanel);
+		yield return FadeIn(spritePanel);
 
 		yield return new WaitForSeconds(2);
 		
-		SceneManager.LoadScene(travelSceneName);
+		SceneManager.LoadScene(sceneName);
 
 		panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
-		yield return FadeOut(panel);
+		yield return FadeOut(panel, spritePanel);
 	}
 
 }

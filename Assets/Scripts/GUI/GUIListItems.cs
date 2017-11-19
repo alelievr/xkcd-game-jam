@@ -111,7 +111,6 @@ public class GUIListItems : MonoBehaviour
 		}
 
 		var transitionSprites = travelTransitions.Where(t => t.type == PlayerStorage.instance.travelType).Select(t => t.sprite);
-		Debug.Log(transitionSprites.Count() + " sprites found for type: " + PlayerStorage.instance.travelType);
 		Sprite transitionSprite = (transitionSprites.Count() != 0) ? transitionSprites.First() : null; 
 
 		if (transitionSprite == null)

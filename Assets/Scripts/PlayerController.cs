@@ -116,9 +116,6 @@ public class PlayerController : MonoBehaviour
 
 	void Start ()
 	{
-		if (dead)
-			return ;
-
 		SetControlFromEquipedItems();
 		
 		rbody = GetComponent< Rigidbody2D >();
@@ -192,6 +189,7 @@ public class PlayerController : MonoBehaviour
 
 	void SetControlFromEquipedItems()
 	{
+		Debug.Log("playerStorgae instance: " + PlayerStorage.instance);
 		if (PlayerStorage.instance == null)
 			return ;
 		
@@ -239,6 +237,8 @@ public class PlayerController : MonoBehaviour
 				control = PlayerControl.None;
 				break ;
 		}
+
+		Debug.Log("control type: " + control + ", travelType: " + PlayerStorage.instance.travelType);
 	}
 	
 	void Update ()
@@ -257,9 +257,9 @@ public class PlayerController : MonoBehaviour
 				break ;
 			case "Ground":
 				Debug.Log("hit ground with velocity: " + rbody.velocity.magnitude);
-				audioSource.PlayOneShot(crash);
 				if (rbody.velocity.magnitude > 10)
 				{
+					audioSource.PlayOneShot(crash);
 					deathType = DeathType.Crashed;
 					Death();
 				}
@@ -305,6 +305,8 @@ public class PlayerController : MonoBehaviour
 
 	void FixedUpdate()
 	{
+		if (dead)
+			return ;
 		if (fixedControlActions.ContainsKey(control))
 			fixedControlActions[control]();
 
