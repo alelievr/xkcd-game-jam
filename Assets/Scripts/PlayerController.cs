@@ -102,6 +102,12 @@ public class PlayerController : MonoBehaviour
 		defaultSpoonPosition = catapultSpoon.transform.position;
 		defaultSquirrelbalPosition = squirrelBall.transform.position;
 
+		if (control == PlayerControl.Flappy)
+		{
+			rbody.constraints = RigidbodyConstraints2D.None;
+			collider.sharedMaterial.friction = 1;
+		}
+
 		if (control == PlayerControl.Kite)
 		{
 			rbody.gravityScale = 0;
@@ -111,6 +117,7 @@ public class PlayerController : MonoBehaviour
 
 		if (control == PlayerControl.Catapult)
 		{
+			catapult.SetActive(true);
 			squirrelBallRigidbody.isKinematic = true;
 			spriteRenderer.enabled = false;
 			rbody.isKinematic = true;
@@ -179,14 +186,16 @@ public class PlayerController : MonoBehaviour
 			if (v < 0 && balloonUpVelocity < minBalloonVelocity)
 				return ;
 			balloonUpVelocity += balloonStep * v;
-			float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 10;
-			balloon.transform.localScale = Vector3.one * s;
 		}
+
+		float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 10;
+		balloon.transform.localScale = Vector3.one * s;
+		
 		if (haveFeather)
 		{
 			v = horizontalKeyDown;
 			if (v != 0)
-				squirrelBallRigidbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
+				rbody.AddForce(Vector2.right * -v * featherPower, ForceMode2D.Impulse);
 		}
 	}
 
@@ -232,7 +241,13 @@ public class PlayerController : MonoBehaviour
 		if (parachuteTriggered)
 		{
 			//decrease velocity and give a bit of left/right control
+			
+			squirrelBallRigidbody.drag = 100;
+			
+			if ((v = horizontalKeyDown) != 0)
+				squirrelBallRigidbody.AddForce(Vector2.right * v * 10, ForceMode2D.Impulse);
 		}
+		transform.position = squirrelBall.transform.position;
 	}
 
 	IEnumerator MoveSpoonToDoubleStick()
