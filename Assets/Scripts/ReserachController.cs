@@ -29,11 +29,12 @@ public class ReserachController : MonoBehaviour
 	Collider2D[]		overlapResults = new Collider2D[10];
 
 	List< Collider2D >	pickableObjects = new List< Collider2D >();
+	Animator			animator;
 
 	void Start ()
 	{
 		rbody = GetComponent< Rigidbody2D >();
-		GetComponent< Collider2D >().sharedMaterial.friction = 0f;
+		animator = GetComponent< Animator >();
 	}
 
 	void FixedUpdate ()
@@ -108,6 +109,14 @@ public class ReserachController : MonoBehaviour
 				grounded = true;
 				break ;
 			}
+		}
+		animator.SetBool("isJumping", !grounded);
+		animator.SetBool("isMoving", Mathf.Abs(rbody.velocity.x) > .2f);
+		if (rbody.velocity.x != 0)
+		{
+			Vector3 scale = transform.localScale;
+			scale.x = Mathf.Abs(scale.x) * -Mathf.Sign(rbody.velocity.x);
+			transform.localScale = scale;
 		}
 	}
 

@@ -86,6 +86,10 @@ public class PlayerController : MonoBehaviour
 	[Space, Header("Virtual camera")]
 	public CinemachineVirtualCamera	virtualCamera;
 
+	[Space, Header("Audio clips")]
+	public AudioClip		waterSplash;
+	public AudioClip		crash;
+
 	float					balloonUpVelocity = 50f;
 
 	float					defaultGravityScale;
@@ -99,6 +103,7 @@ public class PlayerController : MonoBehaviour
 	
 	Vector3					defaultSpoonPosition;
 	Vector3					defaultSquirrelbalPosition;
+	AudioSource				audioSource;
 	float					catapultPower = 40;
 
 	Rigidbody2D				rbody;
@@ -114,9 +119,11 @@ public class PlayerController : MonoBehaviour
 		if (dead)
 			return ;
 
-		// SetControlFromEquipedItems();
+		SetControlFromEquipedItems();
 		
 		rbody = GetComponent< Rigidbody2D >();
+
+		audioSource = GetComponent< AudioSource >();
 		
 		controlActions[PlayerControl.Flappy] = UpdateFlappy;
 		controlActions[PlayerControl.Balloon] = UpdateBalloon;
@@ -250,6 +257,7 @@ public class PlayerController : MonoBehaviour
 				break ;
 			case "Ground":
 				Debug.Log("hit ground with velocity: " + rbody.velocity.magnitude);
+				audioSource.PlayOneShot(crash);
 				if (rbody.velocity.magnitude > 10)
 				{
 					deathType = DeathType.Crashed;
@@ -270,6 +278,7 @@ public class PlayerController : MonoBehaviour
 					rbody.gravityScale = 0;
 					return ;
 				}
+				audioSource.PlayOneShot(waterSplash);
 				deathType = DeathType.Drawn;
 				rbody.drag = 50;
 				rbody.gravityScale = defaultGravityScale;

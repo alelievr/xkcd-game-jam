@@ -41,9 +41,14 @@ public class GUIListItems : MonoBehaviour
 	public Button	tryButton;
 	public Button	backToResearch;
 
+	public AudioClip	craftClip;
+	public AudioClip	craftClickClip;
+
 	Image[]	images;
 
 	Sprite	defaultEquipedSprite;
+
+	AudioSource	audioSource;
 
 	Dictionary< TravelType, List< ItemType > > itemsToTravelType = new Dictionary< TravelType, List< ItemType > >()
 	{
@@ -76,10 +81,13 @@ public class GUIListItems : MonoBehaviour
 		tryButton.onClick.AddListener(() => ShowTravel());
 		tryButton.interactable = false;
 		backToResearch.onClick.AddListener(() => SceneSwitcher.instance.ShowExploration());
+
+		audioSource = GetComponent< AudioSource >();
 	}
 
 	public void ShowTravel()
 	{
+		audioSource.PlayOneShot(craftClip);
 		//item configs:
 		var equipedItems = PlayerStorage.instance.equipedItems;
 
@@ -114,6 +122,7 @@ public class GUIListItems : MonoBehaviour
 
 	public void OnItemClick(int index)
 	{
+		audioSource.PlayOneShot(craftClickClip);
 		var items = PlayerStorage.instance.GetItems();
 
 		if (index >= items.Count)
@@ -151,6 +160,7 @@ public class GUIListItems : MonoBehaviour
 
 	public void OnEquipedClick(int index)
 	{
+		audioSource.PlayOneShot(craftClickClip);
 		PlayerStorage.instance.equipedItems.Remove(index);
 		equipedImages[index].sprite = defaultEquipedSprite;
 	}
