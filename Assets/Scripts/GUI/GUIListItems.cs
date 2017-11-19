@@ -59,7 +59,7 @@ public class GUIListItems : MonoBehaviour
 		{TravelType.Feathers, new List< ItemType >(){ItemType.Feather1, ItemType.Feather2}},
 		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1}},
 		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2}},
-		{TravelType.SpoonAndElastic, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.Any}},
+		{TravelType.SpoonAndElastic, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic}},
 		{TravelType.SpoonAndElasticAndLeaf, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.BigLeaf}},
 		{TravelType.KiteAndFriendAndString, new List< ItemType >(){ItemType.kite, ItemType.FriendSquirel, ItemType.String}},
 		{TravelType.Kite, new List< ItemType >(){ItemType.kite}},
@@ -85,19 +85,44 @@ public class GUIListItems : MonoBehaviour
 		audioSource = GetComponent< AudioSource >();
 	}
 
+	public bool CheckValidCraft(List< ItemType > craftRecipe)
+	{
+		var equipedItems = PlayerStorage.instance.equipedItems;
+		
+		if (craftRecipe.Count == equipedItems.Count())
+		{
+			foreach (var itemType in craftRecipe)
+			{
+				int count = craftRecipe.Count(it => it == itemType);
+				int	count2 = equipedItems.Count(it => it.Value.type == itemType);
+
+				if (count != count2)
+				{
+					foreach (var eq in equipedItems)
+						Debug.Log("it: " + eq.Value.type);
+					Debug.Log(itemType + " -> " + count + ", " + count2);
+					return false;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
 	public void ShowTravel()
 	{
 		audioSource.PlayOneShot(craftClip);
-		//item configs:
+
 		var equipedItems = PlayerStorage.instance.equipedItems;
 
 		PlayerStorage.instance.travelType = TravelType.None;
 		foreach (var kp in itemsToTravelType)
 		{
-			if (kp.Value.All(itemType => equipedItems.Any(e => itemType == ItemType.Any || itemType == e.Value.type)))
+			if (CheckValidCraft(kp.Value))
 			{
+				Debug.Log("key found: " + kp.Key);
 				PlayerStorage.instance.travelType = kp.Key;
-				break ;
+				return ;
 			}
 		}
 
@@ -112,6 +137,8 @@ public class GUIListItems : MonoBehaviour
 
 		var transitionSprites = travelTransitions.Where(t => t.type == PlayerStorage.instance.travelType).Select(t => t.sprite);
 		Sprite transitionSprite = (transitionSprites.Count() != 0) ? transitionSprites.First() : null; 
+
+		Debug.Log("picked sprit: " + transitionSprite + " for type: " + PlayerStorage.instance.travelType);
 
 		if (transitionSprite == null)
 			transitionSprite = notWorkingSprite;

@@ -19,6 +19,7 @@ public enum DeathType
 {
 	Drawn,
 	Crashed,
+	Clouded,
 }
 
 [System.Serializable]
@@ -287,6 +288,13 @@ public class PlayerController : MonoBehaviour
 				rbody.gravityScale = defaultGravityScale;
 				Death();
 				break ;
+			case "Cloud":
+				if (control == PlayerControl.Catapult)
+					return ;
+				// audioSource.PlayOneShot();
+				deathType = DeathType.Clouded;
+				Death();
+				break ;
 		}
 	}
 
@@ -309,7 +317,11 @@ public class PlayerController : MonoBehaviour
 	void FixedUpdate()
 	{
 		if (dead)
+		{
+			if (control == PlayerControl.Kite)
+				kiteLine.SetPosition(1, transform.position);
 			return ;
+		}
 		if (fixedControlActions.ContainsKey(control))
 			fixedControlActions[control]();
 
