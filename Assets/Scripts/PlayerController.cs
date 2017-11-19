@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Cinemachine;
 
 public enum PlayerControl
 {
@@ -18,7 +19,6 @@ public enum DeathType
 {
 	Drawn,
 	Crashed,
-	Clouded,
 }
 
 [System.Serializable]
@@ -60,13 +60,13 @@ public class PlayerController : MonoBehaviour
 	
 	[Space, Header("Catapult control settings")]
 	public bool				haveLeaf = false;
-	public float			baseCatapultPower = 30;
+	public float			baseCatapultPower = 20;
 	public GameObject		catapult;
 	public GameObject		catapultSpoon;
-	public GameObject		squirrelBall;
 	public GameObject		arrow;
 	public Transform		doubleStickTop;
 	public Transform		spoonEndPosition;
+	public Transform		squirrelBallTransform;
 
 	[Space, Header("Squirrel animations")]
 	public GameObject		glidingSquirrelLeaf;
@@ -78,9 +78,13 @@ public class PlayerController : MonoBehaviour
 	public GameObject		balloonSquirrelFeather;
 	public GameObject		tortoiseSquirrel;
 	public GameObject		tortoiseSquirrelCarrotStick;
+	public GameObject		squirrelBall;
 
 	[Space, Header("Dead screens"), SerializeField]
 	public List< DeathTypeScreen >	deadScreens;
+
+	[Space, Header("Virtual camera")]
+	public CinemachineVirtualCamera	virtualCamera;
 
 	float					balloonUpVelocity = 50f;
 
@@ -89,17 +93,16 @@ public class PlayerController : MonoBehaviour
 	bool					catapultThrowed = false;
 	bool					parachuteTriggered = false;
 	Vector2					catapultDirection = Vector2.right;
+	GameObject				instantiatedSquirrelBall;
 	
 	Rigidbody2D				tortoiseRigidbody;
 	
-	Rigidbody2D				squirrelBallRigidbody;
 	Vector3					defaultSpoonPosition;
 	Vector3					defaultSquirrelbalPosition;
 	float					catapultPower = 40;
 
 	Rigidbody2D				rbody;
 	Animator				animator;
-	SpriteRenderer			spriteRenderer;
 	public bool				dead { get; private set; }
 	DeathType				deathType;
 
@@ -126,14 +129,6 @@ public class PlayerController : MonoBehaviour
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
 		balloon.SetActive(control == PlayerControl.Balloon);
-
-		squirrelBallRigidbody = squirrelBall.GetComponent< Rigidbody2D >();
-		spriteRenderer = GetComponent< SpriteRenderer >();
-
-		defaultSpoonPosition = catapultSpoon.transform.position;
-		defaultSquirrelbalPosition = squirrelBall.transform.position;
-
-		defaultGravityScale = rbody.gravityScale;
 
 		switch (control)
 		{
@@ -168,19 +163,24 @@ public class PlayerController : MonoBehaviour
 				break ;
 			case PlayerControl.Catapult:
 				catapult.SetActive(true);
-				squirrelBallRigidbody.isKinematic = true;
-				spriteRenderer.enabled = false;
+				instantiatedSquirrelBall = InstantiateSquirrel(squirrelBall);
 				rbody.isKinematic = true;
 				break ;
 		}
+
+		defaultSpoonPosition = catapultSpoon.transform.position;
+		defaultSquirrelbalPosition = squirrelBallTransform.position;
+
+		defaultGravityScale = rbody.gravityScale;
 	}
 
-	void InstantiateSquirrel(GameObject squirrelPrefab)
+	GameObject InstantiateSquirrel(GameObject squirrelPrefab)
 	{
 		var visual = Instantiate(squirrelPrefab, transform) as GameObject;
 		visual.transform.localPosition = Vector3.zero;
 		visual.transform.localScale = Vector3.one * .2f;
 		animator = visual.GetComponent< Animator >();
+		return visual;
 	}
 
 	void SetControlFromEquipedItems()
@@ -300,9 +300,11 @@ public class PlayerController : MonoBehaviour
 			fixedControlActions[control]();
 
 		//add wind force
-		rbody.AddForce(Vector2.right * defaultWindForce);
+		if (defaultWindForce > Mathf.Epsilon)
+			rbody.AddForce(Vector2.right * defaultWindForce);
 
-		rbody.velocity = new Vector2(Mathf.Clamp(rbody.velocity.x, -maxXVelocity, maxXVelocity), rbody.velocity.y);
+		if (control != PlayerControl.Catapult)
+			rbody.velocity = new Vector2(Mathf.Clamp(rbody.velocity.x, -maxXVelocity, maxXVelocity), rbody.velocity.y);
 	}
 
 	float horizontalKeyDown { get { if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.D)) return 1; if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.A)) return -1; return 0; } }
@@ -381,9 +383,9 @@ public class PlayerController : MonoBehaviour
 			//calcul spoon position and so catapult power+
 			Vector3 decal = new Vector3(1, .5f) * (Mathf.Sin(Time.timeSinceLevelLoad) - 1.5f);
 			catapultSpoon.transform.position = defaultSpoonPosition + decal;
-			squirrelBall.transform.position = defaultSquirrelbalPosition + decal;
+			transform.position = defaultSquirrelbalPosition + decal;
 
-			catapultDirection = doubleStickTop.position - squirrelBall.transform.position;
+			catapultDirection = doubleStickTop.position - transform.position;
 
 			if ((v = verticalKeyDown) != 0)
 			{
@@ -396,31 +398,36 @@ public class PlayerController : MonoBehaviour
 			float rot_z = Mathf.Atan2(catapultDirection.y, catapultDirection.x) * Mathf.Rad2Deg;
         	arrow.transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
 			var scale = arrow.transform.localScale;
-			catapultPower = baseCatapultPower * catapultDirection.magnitude / 4;
+			catapultPower = baseCatapultPower * (.5f + catapultDirection.magnitude / 8);
 			scale.y = catapultDirection.magnitude / 5;
 			arrow.transform.localScale = scale;
 			
 			if (Input.GetKeyDown(KeyCode.Return))
 			{
 				catapultThrowed = true;
+				virtualCamera.m_Lens.FieldOfView = 50;
 				StartCoroutine(MoveSpoonToDoubleStick());
 			}
 		}
 		if (catapultThrowed && haveLeaf)
 		{
 			if (Input.GetKeyDown(KeyCode.Space))
+			{
 				parachuteTriggered = true;
+				Destroy(instantiatedSquirrelBall);
+				InstantiateSquirrel(glidingSquirrelLeaf);
+			}
 		}
+		Debug.DrawRay(transform.position, rbody.velocity, Color.green);
 		if (parachuteTriggered)
 		{
 			//decrease velocity and give a bit of left/right control
 			
-			squirrelBallRigidbody.drag = 100;
+			rbody.drag = 35;
 			
-			if ((v = horizontalKeyDown) != 0)
-				squirrelBallRigidbody.AddForce(Vector2.right * v * 10, ForceMode2D.Impulse);
+			if ((v = Input.GetAxis("Horizontal")) != 0)
+				rbody.AddForce(Vector2.right * v * 1, ForceMode2D.Impulse);
 		}
-		transform.position = squirrelBall.transform.position;
 	}
 
 	IEnumerator MoveSpoonToDoubleStick()
@@ -429,24 +436,35 @@ public class PlayerController : MonoBehaviour
 		{
 			Vector3 tmp = catapultSpoon.transform.position;
 			catapultSpoon.transform.position = Vector3.MoveTowards(catapultSpoon.transform.position, spoonEndPosition.position, .3f);
-			squirrelBall.transform.position += catapultSpoon.transform.position - tmp;
+			transform.position += catapultSpoon.transform.position - tmp;
 			yield return null;
 		}
-		squirrelBallRigidbody.isKinematic = false;
-		squirrelBallRigidbody.AddForce(catapultDirection * catapultPower, ForceMode2D.Impulse);
+		rbody.isKinematic = false;
+		Debug.DrawRay(transform.position, catapultDirection * catapultPower, Color.red, 1);
+		rbody.velocity = Vector2.zero;
+		rbody.AddForce(catapultDirection * catapultPower, ForceMode2D.Impulse);
 	}
 
 	void UpdateTortoise()
 	{
 		Vector3 force;
 		
+		animator.SetBool("crawling", true);
 		if (haveCarrotOnStick)
-		{
-			animator.SetBool("crawling", true);
 			force = Vector3.right * tortoiseSpeed * Time.deltaTime;
-		}
 		else
-			force = Vector3.zero;
+		{
+			force = Vector3.right * tortoiseSpeed * Time.deltaTime;
+			if (transform.position.x > 5)
+			{
+				force += Vector3.down * Time.deltaTime;
+				if (transform.position.x > 5.5f)
+				{
+					deathType = deathType = DeathType.Drawn;
+					Death();
+				}
+			}
+		}
 		
 		transform.position += force;
 

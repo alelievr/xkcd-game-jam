@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 95041157196467766}
   - component: {fileID: 58120023551402578}
   m_Layer: 0
-  m_Name: TortoiseSquirrel
+  m_Name: TortoiseSquirrelCarrotStick
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
