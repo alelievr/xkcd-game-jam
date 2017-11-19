@@ -14,6 +14,20 @@ public enum PlayerControl
 	Kite,
 }
 
+public enum DeadType
+{
+	Drawn,
+	Crashed,
+	Clouded,
+}
+
+[System.Serializable]
+public struct DeadTypeScreen
+{
+	public DeadType	type;
+	public Sprite	sprite;
+}
+
 public class PlayerController : MonoBehaviour
 {
 	[Header("Global settings")]
@@ -57,6 +71,9 @@ public class PlayerController : MonoBehaviour
 	public Transform		doubleStickTop;
 	public Transform		spoonEndPosition;
 
+	[Space, Header("Dead screens"), SerializeField]
+	public List< DeadTypeScreen >	deadScreens;
+
 	float					balloonUpVelocity = 50f;
 
 	bool					catapultThrowed = false;
@@ -74,6 +91,7 @@ public class PlayerController : MonoBehaviour
 	SpriteRenderer			spriteRenderer;
 	new Collider2D			collider;
 	public bool				dead { get; private set; }
+	DeadType				deadType;
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
 	Dictionary< PlayerControl, Action >	fixedControlActions = new Dictionary< PlayerControl, Action >();
@@ -194,11 +212,16 @@ public class PlayerController : MonoBehaviour
 		switch (other.collider.tag)
 		{
 			case "Water":
-				Death();
+				deadType = DeadType.Drawn;
 				rbody.drag = 50;
+				Death();
 				break ;
 			case "Obstacle":
 				Death();
+				break ;
+			case "Ground":
+				if (rbody.velocity.magnitude > 10)
+					deadType = DeadType.Crashed;
 				break ;
 		}
 	}

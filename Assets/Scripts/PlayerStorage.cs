@@ -25,7 +25,6 @@ public class PlayerStorage : MonoBehaviour
 
 	public List< Item > GetItems()
 	{
-		Debug.Log("items: " + playerItems.Count);
 		return playerItems;
 	}
 	
