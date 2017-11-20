@@ -21722,6 +21722,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.size
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 4799455868471838, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0.9
@@ -21789,6 +21794,22 @@ Prefab:
         type: 2}
       propertyPath: deadScreens.Array.data[4].text
       value: For squirrel cloud are solid, avoid them next time!
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[5].type
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[5].sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4ef1dffceffd45b419f0760db1a3218d,
+        type: 3}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[5].text
+      value: That was painful !
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
