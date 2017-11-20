@@ -69,9 +69,12 @@ public class SceneSwitcher : MonoBehaviour {
 			StartCoroutine(FadeSceneWithSprite(craftSceneName, transition, 2, text));
 	}
 
-	public void ShowCredits()
+	public void ShowCredits(Sprite sprite, string text)
 	{
-		StartCoroutine(FadeScene(creditsSceneame));
+		if (sprite == null)
+			StartCoroutine(FadeScene(creditsSceneame));
+		else
+			StartCoroutine(FadeSceneWithSprite(creditsSceneame, sprite, 4));
 	}
 
 	public void ShowScene(string sceneName)
@@ -84,10 +87,10 @@ public class SceneSwitcher : MonoBehaviour {
 		switch (scene)
 		{
 			case Scene.Craft:
-				SceneSwitcher.instance.ShowCraft(null, null);
+				SceneSwitcher.instance.ShowCraft(null, "");
 				break ;
 			case Scene.Credits:
-				SceneSwitcher.instance.ShowCredits();
+				SceneSwitcher.instance.ShowCredits(null, "");
 				break ;
 			case Scene.Exploration:
 				SceneSwitcher.instance.ShowExploration();
@@ -96,10 +99,10 @@ public class SceneSwitcher : MonoBehaviour {
 				SceneSwitcher.instance.ShowHistory();
 				break ;
 			case Scene.TitleScreen:
-				SceneSwitcher.instance.ShowTitleScreen(null, null);
+				SceneSwitcher.instance.ShowTitleScreen(null, "");
 				break ;
 			case Scene.Travel:
-				SceneSwitcher.instance.ShowTravel(null, null);
+				SceneSwitcher.instance.ShowTravel(null, "");
 				break ;
 		}
 	}

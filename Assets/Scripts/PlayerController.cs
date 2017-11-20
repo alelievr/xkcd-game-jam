@@ -87,6 +87,7 @@ public class PlayerController : MonoBehaviour
 
 	[Space, Header("Dead screens"), SerializeField]
 	public List< DeathTypeScreen >	deadScreens;
+	public Sprite					winSprite;
 
 	[Space, Header("Virtual camera")]
 	public CinemachineVirtualCamera	virtualCamera;
@@ -310,7 +311,18 @@ public class PlayerController : MonoBehaviour
 				}
 				Death();
 				break ;
+			case "Victory":
+				StartCoroutine(WillWin());
+				break ;
 		}
+	}
+
+	IEnumerator WillWin()
+	{
+		yield return new WaitForSeconds(.5f);
+
+		if (!dead)
+			SceneSwitcher.instance.ShowCredits(winSprite, "You did it! Well done! Now, you can enjoy your acorn paradise!");
 	}
 
 	void Death()

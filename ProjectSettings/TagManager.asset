@@ -9,6 +9,7 @@ TagManager:
   - Water
   - Pickable
   - Cloud
+  - Victory
   layers:
   - Default
   - TransparentFX
