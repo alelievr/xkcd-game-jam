@@ -263,6 +263,7 @@ public class PlayerController : MonoBehaviour
 		{
 			case "Obstacle":
 				Death();
+				deathType = DeathType.Hited;
 				break ;
 			case "Ground":
 				Debug.Log("hit ground with velocity: " + other.relativeVelocity.magnitude);
