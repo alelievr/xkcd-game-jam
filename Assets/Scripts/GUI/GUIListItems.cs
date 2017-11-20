@@ -138,7 +138,20 @@ public class GUIListItems : MonoBehaviour
 		Debug.Log("picked sprit: " + transitionSprite + " for type: " + PlayerStorage.instance.travelType);
 
 		if (transitionSprite.sprite == null)
-			transitionSprite.sprite = notWorkingSprite;
+		{
+			string	explanation = "default explanation";
+
+			foreach (var eq in equipedItems)
+			{
+				if (eq.Value.type == ItemType.Carrot)
+				{
+					explanation = "lol what's a carrot !";
+					break ;
+				}
+			}
+
+			SceneSwitcher.instance.ShowCraft(notWorkingSprite, explanation);
+		}
 
 		SceneSwitcher.instance.ShowTravel(transitionSprite.sprite, transitionSprite.text);
 	}

@@ -35,13 +35,12 @@ public class SceneSwitcher : MonoBehaviour {
 		DontDestroyOnLoad(this);
 	}
 
-	public void ShowTitleScreen(Sprite deadScreen)
+	public void ShowTitleScreen(Sprite deadScreen, string text)
 	{
-		Debug.Log("show title screen: " + titleScreenSceneName);
 		if (deadScreen == null)
 			StartCoroutine(FadeScene(titleScreenSceneName));
 		else
-			StartCoroutine(FadeSceneWithSprite(titleScreenSceneName, deadScreen, 4f));
+			StartCoroutine(FadeSceneWithSprite(titleScreenSceneName, deadScreen, 4f, text));
 	}
 
 	public void ShowHistory()
@@ -62,9 +61,12 @@ public class SceneSwitcher : MonoBehaviour {
 			StartCoroutine(FadeSceneWithSprite(travelSceneName, transition, 2, text));
 	}
 
-	public void ShowCraft()
+	public void ShowCraft(Sprite transition, string text)
 	{
-		StartCoroutine(FadeScene(craftSceneName));
+		if (transition == null)
+			StartCoroutine(FadeScene(craftSceneName));
+		else
+			StartCoroutine(FadeSceneWithSprite(craftSceneName, transition, 2, text));
 	}
 
 	public void ShowCredits()
@@ -82,7 +84,7 @@ public class SceneSwitcher : MonoBehaviour {
 		switch (scene)
 		{
 			case Scene.Craft:
-				SceneSwitcher.instance.ShowCraft();
+				SceneSwitcher.instance.ShowCraft(null, null);
 				break ;
 			case Scene.Credits:
 				SceneSwitcher.instance.ShowCredits();
@@ -94,7 +96,7 @@ public class SceneSwitcher : MonoBehaviour {
 				SceneSwitcher.instance.ShowHistory();
 				break ;
 			case Scene.TitleScreen:
-				SceneSwitcher.instance.ShowTitleScreen(null);
+				SceneSwitcher.instance.ShowTitleScreen(null, null);
 				break ;
 			case Scene.Travel:
 				SceneSwitcher.instance.ShowTravel(null, null);

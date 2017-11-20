@@ -19,14 +19,17 @@ public enum DeathType
 {
 	Drawn,
 	Crashed,
-	Clouded,
+	CloudedBalloon,
+	CloudedKite,
+	CloudedFeather,
 }
 
 [System.Serializable]
 public struct DeathTypeScreen
 {
 	public DeathType	type;
-	public Sprite	sprite;
+	public Sprite		sprite;
+	public string		text;
 }
 
 public class PlayerController : MonoBehaviour
@@ -292,7 +295,19 @@ public class PlayerController : MonoBehaviour
 				if (control == PlayerControl.Catapult)
 					return ;
 				// audioSource.PlayOneShot();
-				deathType = DeathType.Clouded;
+				switch (control)
+				{
+					case PlayerControl.Balloon:
+						deathType = DeathType.CloudedBalloon;
+						break ;
+					case PlayerControl.Flappy:
+					case PlayerControl.FlappyOne:
+						deathType = DeathType.CloudedFeather;
+						break ;
+					default:
+						deathType = DeathType.CloudedKite;
+						break ;
+				}
 				Death();
 				break ;
 		}
@@ -309,9 +324,9 @@ public class PlayerController : MonoBehaviour
 	{
 		yield return new WaitForSeconds(1);
 
-		Sprite deathSprite = deadScreens.Find(d => d.type == deathType).sprite;
+		var deathInfo = deadScreens.Find(d => d.type == deathType);
 
-		SceneSwitcher.instance.ShowTitleScreen(deathSprite);
+		SceneSwitcher.instance.ShowTitleScreen(deathInfo.sprite, deathInfo.text);
 	}
 
 	void FixedUpdate()

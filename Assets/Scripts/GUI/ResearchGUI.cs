@@ -6,6 +6,6 @@ public class ResearchGUI : MonoBehaviour
 {
     public void SwitchToCraft()
     {
-        SceneSwitcher.instance.ShowCraft();
+        SceneSwitcher.instance.ShowCraft(null, null);
     }
 }
