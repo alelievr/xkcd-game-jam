@@ -268,12 +268,12 @@ Prefab:
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 428.0519
+      value: 310.0519
       objectReference: {fileID: 0}
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 275.7671
+      value: 188.76707
       objectReference: {fileID: 0}
     - target: {fileID: 114932874766016020, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
@@ -327,7 +327,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 259987823}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0018920898, y: -343.61963, z: 0}
+  m_LocalPosition: {x: 0.0018920898, y: -356.80322, z: 0}
   m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
   m_Children: []
   m_Father: {fileID: 1020811812}
@@ -375,7 +375,7 @@ MonoBehaviour:
 
     Nicolas Valentin
 
-    et
+    and
 
     Meadjix
 
@@ -529,7 +529,7 @@ RectTransform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1749840695}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0018920898, y: 921.48035, z: 0}
+  m_LocalPosition: {x: 0.0018920898, y: 908.29675, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1020811812}

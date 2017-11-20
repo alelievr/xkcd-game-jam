@@ -8,11 +8,16 @@ public class ShowAfterSeconds : MonoBehaviour
 	public float		timeout = 3f;
 	public float		fadeTime = .5f;
 
-	Image				image;
+	Image[]				images;
+	Text[]				texts;
 
 	void Start () {
-		image = GetComponent< Image >();
-		image.color = new Color(0, 0, 0, 0);
+		images = GetComponentsInChildren< Image >();
+		texts = GetComponentsInChildren< Text >();
+		foreach (var image in images)
+			image.color = new Color(0, 0, 0, 0);
+		foreach (var text in texts)
+			text.color = new Color(0, 0, 0, 0);
 		StartCoroutine(ShowButton());
 	}
 	
@@ -26,7 +31,10 @@ public class ShowAfterSeconds : MonoBehaviour
 		do
 		{
 			alpha = ((Time.time - startTime) / fadeTime);
-			image.color = new Color(1, 1, 1, alpha);
+			foreach (var image in images)
+				image.color = new Color(1, 1, 1, alpha);
+			foreach (var text in texts)
+				text.color = new Color(1, 1, 1, alpha);
 			yield return null;
 		} while (alpha < 1f);
 	}

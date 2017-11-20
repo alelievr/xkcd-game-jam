@@ -53,23 +53,24 @@ public class GUIListItems : MonoBehaviour
 
 	Dictionary< TravelType, List< ItemType > > itemsToTravelType = new Dictionary< TravelType, List< ItemType > >()
 	{
-		{TravelType.Balloon, new List< ItemType >(){ItemType.Baloon}},
+		{TravelType.Balloon, new List< ItemType >(){ItemType.Baloon, ItemType.String}},
 		{TravelType.BalloonAndStringAndFeather1, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.Feather1}},
 		{TravelType.BalloonAndStringAndFeather2, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.Feather2}},
-		{TravelType.BalloonAndStringAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.BigLeaf}},
+		{TravelType.BalloonAndStringAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.BigLeaf}},
 		{TravelType.Feathers, new List< ItemType >(){ItemType.Feather1, ItemType.Feather2}},
-		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1}},
-		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2}},
+		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1, ItemType.Any}},
+		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2, ItemType.Any}},
 		{TravelType.SpoonAndElastic, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic}},
 		{TravelType.SpoonAndElasticAndLeaf, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.BigLeaf}},
 		{TravelType.KiteAndFriendAndString, new List< ItemType >(){ItemType.kite, ItemType.FriendSquirel, ItemType.String}},
 		{TravelType.Kite, new List< ItemType >(){ItemType.kite}},
 		{TravelType.TortoiseAndCarrotAndString, new List< ItemType >(){ItemType.Tortoise, ItemType.Carrot, ItemType.String}},
-		{TravelType.Tortoise, new List< ItemType >(){ItemType.Tortoise}},
+		{TravelType.Tortoise, new List< ItemType >(){ItemType.Tortoise, ItemType.Any, ItemType.Any}},
 	};
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+	{
 		images = GetComponentsInChildren< Image >();
 
 		int i = 0;
@@ -86,41 +87,50 @@ public class GUIListItems : MonoBehaviour
 		audioSource = GetComponent< AudioSource >();
 	}
 
-	public bool CheckValidCraft(List< ItemType > craftRecipe)
+	public int CheckValidCraft(List< ItemType > craftRecipe)
 	{
 		var equipedItems = PlayerStorage.instance.equipedItems;
+		int	itemCount = 0;
 		
 		if (craftRecipe.Count == equipedItems.Count())
 		{
 			foreach (var itemType in craftRecipe)
 			{
+				if (itemType == ItemType.Any)
+					continue ;
+
 				int count = craftRecipe.Count(it => it == itemType);
 				int	count2 = equipedItems.Count(it => it.Value.type == itemType);
 
 				if (count != count2)
-				{
-					foreach (var eq in equipedItems)
-						Debug.Log("it: " + eq.Value.type);
-					Debug.Log(itemType + " -> " + count + ", " + count2);
-					return false;
-				}
+					return -1;
+				
+				itemCount++;
 			}
-			return true;
+			return itemCount;
 		}
-		return false;
+		return -1;
 	}
 
 	public void ShowTravel()
 	{
 		audioSource.PlayOneShot(craftClip);
+		int	max = -1;
+		int i;
 
 		var equipedItems = PlayerStorage.instance.equipedItems;
 
 		PlayerStorage.instance.travelType = TravelType.None;
 		foreach (var kp in itemsToTravelType)
 		{
-			if (CheckValidCraft(kp.Value))
-				PlayerStorage.instance.travelType = kp.Key;
+			if ((i = CheckValidCraft(kp.Value)) > 0)
+			{
+				if (i > max)
+				{
+					PlayerStorage.instance.travelType = kp.Key;
+					max = i;
+				}
+			}
 		}
 
 		if (PlayerStorage.instance.travelType == TravelType.SpoonAndElastic)

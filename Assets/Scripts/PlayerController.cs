@@ -455,7 +455,7 @@ public class PlayerController : MonoBehaviour
 			balloonUpVelocity += balloonStep * v;
 		}
 
-		float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 20;
+		float s = .5f + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 20;
 		balloon.transform.localScale = Vector3.one * s;
 		
 		if (haveFeather)
