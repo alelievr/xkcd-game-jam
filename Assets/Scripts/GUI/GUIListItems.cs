@@ -27,6 +27,7 @@ public struct TravelTypeTransition
 {
 	public TravelType	type;
 	public Sprite		sprite;
+	public string		text;
 }
 
 public class GUIListItems : MonoBehaviour
@@ -119,11 +120,7 @@ public class GUIListItems : MonoBehaviour
 		foreach (var kp in itemsToTravelType)
 		{
 			if (CheckValidCraft(kp.Value))
-			{
-				Debug.Log("key found: " + kp.Key);
 				PlayerStorage.instance.travelType = kp.Key;
-				return ;
-			}
 		}
 
 		if (PlayerStorage.instance.travelType == TravelType.SpoonAndElastic)
@@ -135,15 +132,15 @@ public class GUIListItems : MonoBehaviour
 					PlayerStorage.instance.catapultSecondItem = ei.Value;
 		}
 
-		var transitionSprites = travelTransitions.Where(t => t.type == PlayerStorage.instance.travelType).Select(t => t.sprite);
-		Sprite transitionSprite = (transitionSprites.Count() != 0) ? transitionSprites.First() : null; 
+		var transition = travelTransitions.Where(t => t.type == PlayerStorage.instance.travelType);
+		TravelTypeTransition transitionSprite = (transition.Count() != 0) ? transition.First() : default(TravelTypeTransition); 
 
 		Debug.Log("picked sprit: " + transitionSprite + " for type: " + PlayerStorage.instance.travelType);
 
-		if (transitionSprite == null)
-			transitionSprite = notWorkingSprite;
+		if (transitionSprite.sprite == null)
+			transitionSprite.sprite = notWorkingSprite;
 
-		SceneSwitcher.instance.ShowTravel(transitionSprite);
+		SceneSwitcher.instance.ShowTravel(transitionSprite.sprite, transitionSprite.text);
 	}
 
 	public void OnItemClick(int index)
