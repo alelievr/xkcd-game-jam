@@ -116,6 +116,7 @@ public class PlayerController : MonoBehaviour
 	Rigidbody2D				rbody;
 	Animator				animator;
 	public bool				dead { get; private set; }
+	bool					win;
 	DeathType				deathType;
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
@@ -267,7 +268,7 @@ public class PlayerController : MonoBehaviour
 				break ;
 			case "Ground":
 				Debug.Log("hit ground with velocity: " + other.relativeVelocity.magnitude);
-				if (other.relativeVelocity.magnitude > 10)
+				if (other.relativeVelocity.magnitude > 25)
 				{
 					audioSource.PlayOneShot(crash);
 					deathType = DeathType.Crashed;
@@ -325,10 +326,13 @@ public class PlayerController : MonoBehaviour
 
 		if (!dead)
 			SceneSwitcher.instance.ShowCredits(winSprite, "You did it! Well done! Now, you can enjoy your acorn paradise!");
+		win = true;
 	}
 
 	void Death()
 	{
+		if (dead || win)
+			return ;
 		Debug.Log("you're dead");
 		dead = true;
 		StartCoroutine(TitleScreenTimeout());
@@ -411,7 +415,7 @@ public class PlayerController : MonoBehaviour
 			balloonUpVelocity += balloonStep * v;
 		}
 
-		float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 10;
+		float s = 1 + (balloonUpVelocity + (Physics.gravity.y * rbody.gravityScale)) / 20;
 		balloon.transform.localScale = Vector3.one * s;
 		
 		if (haveFeather)
@@ -481,7 +485,7 @@ public class PlayerController : MonoBehaviour
 			rbody.drag = 35;
 			
 			if ((v = Input.GetAxis("Horizontal")) != 0)
-				rbody.AddForce(Vector2.right * v * 10, ForceMode2D.Impulse);
+				rbody.AddForce(Vector2.right * v * 3, ForceMode2D.Impulse);
 		}
 	}
 

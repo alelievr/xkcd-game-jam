@@ -74,7 +74,7 @@ public class SceneSwitcher : MonoBehaviour {
 		if (sprite == null)
 			StartCoroutine(FadeScene(creditsSceneame));
 		else
-			StartCoroutine(FadeSceneWithSprite(creditsSceneame, sprite, 4));
+			StartCoroutine(FadeSceneWithSprite(creditsSceneame, sprite, 4, text));
 	}
 
 	public void ShowScene(string sceneName)
@@ -121,6 +121,9 @@ public class SceneSwitcher : MonoBehaviour {
 			alpha = fadeCurve.Evaluate(alpha);
 			spriteColor.a = alpha;
 			defaultColor.a = alpha;
+			defaultTextColor.a = alpha;
+			if (text != null)
+				text.color = defaultTextColor;
 			if (spriteImage != null)
 				spriteImage.color = spriteColor;
 			if (fadeAudioSource != null)
@@ -162,7 +165,13 @@ public class SceneSwitcher : MonoBehaviour {
 		SceneManager.LoadScene(sceneName);
 
 		panel = GameObject.Find("fullScreenPanel").GetComponent< Image >();
-		yield return FadeOut(panel);
+		var spritePanel = GameObject.Find("fullScreenSprite").GetComponent< Image >();
+		var textComp = GameObject.Find("fullScreenText").GetComponent< Text >();
+		if (spritePanel.color.a == 0)
+			spritePanel = null;
+		if (textComp.color.a == 0)
+			textComp = null;
+		yield return FadeOut(panel, spritePanel, textComp);
 	}
 
 	IEnumerator FadeSceneWithSprite(string sceneName, Sprite sprite, float time = 2, string text = null)
