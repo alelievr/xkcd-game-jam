@@ -145,12 +145,31 @@ public class GUIListItems : MonoBehaviour
 			{
 				if (eq.Value.type == ItemType.Carrot)
 				{
-					explanation = "lol what's a carrot !";
+					explanation = "What did you expect from a carrot ?";
+					break ;
+				}
+
+				if (eq.Value.type == ItemType.String)
+				{
+					explanation = "String can only link other objects !";
+					break ;
+				}
+
+				if (eq.Value.type == ItemType.Elastic)
+				{
+					explanation = "An elastic without structure is useless... ";
+					break ;
+				}
+
+				if (eq.Value.type == ItemType.Spoon)
+				{
+					explanation = "Without elasticity it won't propulse you !";
 					break ;
 				}
 			}
 
 			SceneSwitcher.instance.ShowCraft(notWorkingSprite, explanation);
+			return ;
 		}
 
 		SceneSwitcher.instance.ShowTravel(transitionSprite.sprite, transitionSprite.text);
