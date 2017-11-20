@@ -129,6 +129,7 @@ public class PlayerController : MonoBehaviour
 	Animator				animator;
 	public bool				dead { get; private set; }
 	bool					win;
+	bool					willWin;
 	DeathType				deathType;
 
 	Dictionary< PlayerControl, Action >	controlActions = new Dictionary< PlayerControl, Action >();
@@ -355,13 +356,15 @@ public class PlayerController : MonoBehaviour
 				Death();
 				break ;
 			case "Victory":
-				StartCoroutine(WillWin());
+				if (!win && !willWin)
+					StartCoroutine(WillWin());
 				break ;
 		}
 	}
 
 	IEnumerator WillWin()
 	{
+		willWin = true;
 		yield return new WaitForSeconds(.5f);
 
 		if (!dead)
@@ -559,7 +562,7 @@ public class PlayerController : MonoBehaviour
 				force += Vector3.down * Time.deltaTime;
 				if (transform.position.x > 5.5f)
 				{
-					deathType = deathType = DeathType.Drawn;
+					deathType = DeathType.Drawn;
 					Death();
 				}
 			}

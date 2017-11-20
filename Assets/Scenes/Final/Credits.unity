@@ -283,7 +283,7 @@ Prefab:
     - target: {fileID: 20002002545137162, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_BackGroundColor.r
-      value: 0.65517235
+      value: 0.53103447
       objectReference: {fileID: 0}
     - target: {fileID: 20002002545137162, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
@@ -303,6 +303,23 @@ RectTransform:
   m_PrefabParentObject: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
     type: 2}
   m_PrefabInternal: {fileID: 75357873}
+--- !u!1 &75357875 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1697611659650234, guid: 98dd291848b434f9a9dd6796cbddf057,
+    type: 2}
+  m_PrefabInternal: {fileID: 75357873}
+--- !u!114 &75357876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 75357875}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff26db721962cdf4a8edcdfa9a767d2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  profile: {fileID: 11400000, guid: 0e5f2675be484434b98dea117570adbe, type: 2}
 --- !u!1 &259987823
 GameObject:
   m_ObjectHideFlags: 0

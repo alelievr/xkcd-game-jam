@@ -58,14 +58,14 @@ public class GUIListItems : MonoBehaviour
 		{TravelType.BalloonAndStringAndFeather2, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.Feather2}},
 		{TravelType.BalloonAndStringAndLeaf, new List< ItemType >(){ItemType.Baloon, ItemType.String, ItemType.BigLeaf}},
 		{TravelType.Feathers, new List< ItemType >(){ItemType.Feather1, ItemType.Feather2}},
-		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1, ItemType.Any}},
-		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2, ItemType.Any}},
+		{TravelType.Feather1, new List< ItemType >(){ItemType.Feather1}},
+		{TravelType.Feather2, new List< ItemType >(){ItemType.Feather2}},
 		{TravelType.SpoonAndElastic, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic}},
 		{TravelType.SpoonAndElasticAndLeaf, new List< ItemType >(){ItemType.Spoon, ItemType.Elastic, ItemType.BigLeaf}},
 		{TravelType.KiteAndFriendAndString, new List< ItemType >(){ItemType.kite, ItemType.FriendSquirel, ItemType.String}},
 		{TravelType.Kite, new List< ItemType >(){ItemType.kite}},
 		{TravelType.TortoiseAndCarrotAndString, new List< ItemType >(){ItemType.Tortoise, ItemType.Carrot, ItemType.String}},
-		{TravelType.Tortoise, new List< ItemType >(){ItemType.Tortoise, ItemType.Any, ItemType.Any}},
+		{TravelType.Tortoise, new List< ItemType >(){ItemType.Tortoise}},
 	};
 
 	// Use this for initialization
@@ -149,7 +149,7 @@ public class GUIListItems : MonoBehaviour
 
 		if (transitionSprite.sprite == null)
 		{
-			string	explanation = "default explanation";
+			string	explanation = "";
 
 			foreach (var eq in equipedItems)
 			{
