@@ -21364,12 +21364,12 @@ Prefab:
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.9029236
+      value: 0.90289307
       objectReference: {fileID: 0}
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.90908813
+      value: 0.9090729
       objectReference: {fileID: 0}
     - target: {fileID: 223733589108083746, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
@@ -21759,6 +21759,37 @@ Prefab:
       propertyPath: virtualCamera
       value: 
       objectReference: {fileID: 1887435122}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: winSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: dbf365c9992319441b38b4a366b9c8c8,
+        type: 3}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[0].text
+      value: It is obvious you can't swim.
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[1].text
+      value: You may have landed too fast...
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[2].text
+      value: For squirrel cloud are solid, avoid them next time!
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[3].text
+      value: For squirrel cloud are solid, avoid them next time!
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: deadScreens.Array.data[4].text
+      value: For squirrel cloud are solid, avoid them next time!
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
   m_IsPrefabParent: 0
