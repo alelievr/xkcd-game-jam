@@ -267,7 +267,7 @@ public class PlayerController : MonoBehaviour
 				break ;
 			case "Ground":
 				Debug.Log("hit ground with velocity: " + other.relativeVelocity.magnitude);
-				if (other.relativeVelocity.magnitude > 8)
+				if (other.relativeVelocity.magnitude > 10)
 				{
 					audioSource.PlayOneShot(crash);
 					deathType = DeathType.Crashed;
@@ -481,7 +481,7 @@ public class PlayerController : MonoBehaviour
 			rbody.drag = 35;
 			
 			if ((v = Input.GetAxis("Horizontal")) != 0)
-				rbody.AddForce(Vector2.right * v * 1, ForceMode2D.Impulse);
+				rbody.AddForce(Vector2.right * v * 10, ForceMode2D.Impulse);
 		}
 	}
 

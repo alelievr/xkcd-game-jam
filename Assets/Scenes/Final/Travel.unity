@@ -21364,12 +21364,12 @@ Prefab:
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.9029236
+      value: 0.90289307
       objectReference: {fileID: 0}
     - target: {fileID: 224306635358698768, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.90908813
+      value: 0.9090729
       objectReference: {fileID: 0}
     - target: {fileID: 223733589108083746, guid: 98dd291848b434f9a9dd6796cbddf057,
         type: 2}
@@ -21499,8 +21499,8 @@ PolygonCollider2D:
       - {x: -8.272804, y: 3.3677983}
       - {x: -8.295311, y: 2.5082388}
       - {x: -9.409424, y: 2.2045062}
-      - {x: -9.474163, y: 0.21006274}
-      - {x: -4.2032585, y: 0.27369785}
+      - {x: -9.376839, y: 1.9522147}
+      - {x: -4.174057, y: 1.7919974}
       - {x: -4.30249, y: 2.1986957}
       - {x: -4.8984604, y: 2.550993}
 --- !u!4 &601714429
@@ -21797,7 +21797,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 698444465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 29.54, y: 0.86, z: 0}
+  m_LocalPosition: {x: 36.29, y: 17.62, z: 0}
   m_LocalScale: {x: 0.60861874, y: 0.6086188, z: 0.6086188}
   m_Children:
   - {fileID: 1702342287}
@@ -21953,6 +21953,26 @@ Prefab:
         type: 2}
       propertyPath: deadScreens.Array.data[5].text
       value: That was painful !
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: control
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: haveCarrotOnStick
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: tortoiseSpeed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114720143534782908, guid: e7d99344504154ee8b9ab727b109de7f,
+        type: 2}
+      propertyPath: haveLeaf
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e7d99344504154ee8b9ab727b109de7f, type: 2}
@@ -35025,15 +35045,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400044, guid: 2f7733808ac0796488b347a46b0da221, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.5758705
+      value: 15.4
       objectReference: {fileID: 0}
     - target: {fileID: 400044, guid: 2f7733808ac0796488b347a46b0da221, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.2658043
+      value: 12.8
       objectReference: {fileID: 0}
     - target: {fileID: 400044, guid: 2f7733808ac0796488b347a46b0da221, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.82
+      value: 2.05
       objectReference: {fileID: 0}
     - target: {fileID: 400044, guid: 2f7733808ac0796488b347a46b0da221, type: 3}
       propertyPath: m_LocalRotation.x
