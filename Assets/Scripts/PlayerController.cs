@@ -22,6 +22,7 @@ public enum DeathType
 	CloudedBalloon,
 	CloudedKite,
 	CloudedFeather,
+	Hited,
 }
 
 [System.Serializable]
