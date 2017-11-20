@@ -13,6 +13,7 @@ public enum PlayerControl
 	Catapult,
 	Tortoise,
 	Kite,
+	KiteWithoutFriend,
 }
 
 public enum DeathType
@@ -31,6 +32,13 @@ public struct DeathTypeScreen
 	public DeathType	type;
 	public Sprite		sprite;
 	public string		text;
+}
+
+[System.Serializable]
+public struct TravelTypeGUI
+{
+	public PlayerControl	playerControl;
+	public GameObject		gui;
 }
 
 public class PlayerController : MonoBehaviour
@@ -97,6 +105,10 @@ public class PlayerController : MonoBehaviour
 	public AudioClip		waterSplash;
 	public AudioClip		crash;
 
+	[Space, Header("GUI Helpers")]
+	public GameObject				guiHelper;
+	public List< TravelTypeGUI >	travelGUIs;
+
 	float					balloonUpVelocity = 50f;
 
 	float					defaultGravityScale;
@@ -137,6 +149,7 @@ public class PlayerController : MonoBehaviour
 		controlActions[PlayerControl.Tortoise] = UpdateTortoise;
 		controlActions[PlayerControl.None] = UpdateNone;
 		controlActions[PlayerControl.FlappyOne] = UpdateFlappyOne;
+		controlActions[PlayerControl.KiteWithoutFriend] = UpdateKiteWithoutFriend;
 
 		fixedControlActions[PlayerControl.Balloon] = FixedUpdateBalloon;
 
@@ -180,12 +193,34 @@ public class PlayerController : MonoBehaviour
 				instantiatedSquirrelBall = InstantiateSquirrel(squirrelBall);
 				rbody.isKinematic = true;
 				break ;
+			case PlayerControl.KiteWithoutFriend:
+				InstantiateSquirrel(glidingSuirrelKite);
+				StartCoroutine(ThrowSquirrelKite());
+				rbody.isKinematic = true;
+				break ;
 		}
+
+		travelGUIs.ForEach(a => {
+			if (a.playerControl == control)
+			{
+				a.gui.SetActive(true);
+				guiHelper.SetActive(true);
+			}
+		});
 
 		defaultSpoonPosition = catapultSpoon.transform.position;
 		defaultSquirrelbalPosition = squirrelBallTransform.position;
 
 		defaultGravityScale = rbody.gravityScale;
+	}
+
+	IEnumerator ThrowSquirrelKite()
+	{
+		yield return new WaitForSeconds(.5f);
+		rbody.isKinematic = false;
+
+		rbody.drag = 10;
+		rbody.AddForce(Vector2.right * 60, ForceMode2D.Impulse);
 	}
 
 	GameObject InstantiateSquirrel(GameObject squirrelPrefab)
@@ -243,8 +278,13 @@ public class PlayerController : MonoBehaviour
 				defaultWindForce = 0;
 				haveCarrotOnStick = true;
 				break ;
+			case TravelType.Kite:
+				control = PlayerControl.KiteWithoutFriend;
+				defaultWindForce = 0;
+				break ;
 			default:
 				control = PlayerControl.None;
+				Death();
 				break ;
 		}
 
@@ -362,7 +402,7 @@ public class PlayerController : MonoBehaviour
 		if (defaultWindForce > Mathf.Epsilon)
 			rbody.AddForce(Vector2.right * defaultWindForce);
 
-		if (control != PlayerControl.Catapult)
+		if (control != PlayerControl.Catapult && control != PlayerControl.KiteWithoutFriend)
 			rbody.velocity = new Vector2(Mathf.Clamp(rbody.velocity.x, -maxXVelocity, maxXVelocity), rbody.velocity.y);
 	}
 
@@ -545,6 +585,11 @@ public class PlayerController : MonoBehaviour
 		float whirl = Mathf.Sin(Time.timeSinceLevelLoad / .9f) * kiteWirlRange * (1 + Vector3.Distance(kiteAnchor.position, transform.position) / 20);
 		rbody.AddForce(Vector2.up * whirl, ForceMode2D.Force);
 		Debug.DrawRay(transform.position, startDirection, Color.red);
+	}
+
+	void UpdateKiteWithoutFriend()
+	{
+
 	}
 
 	void FixedUpdateBalloon()
